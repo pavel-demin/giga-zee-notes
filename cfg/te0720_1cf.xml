@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE project PUBLIC "project" "project.dtd" >
+<project version="1.0" >
+  <description >
+  </description>
+  <Projinfo Part="xc7z020clg484-1" DeviceSize="xc7z020" Package="clg484" Speed="-1" />
+  <set param="PCW::ENET0::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::ENET0::GRP_MDIO::ENABLE" value="1" />
+  <set param="PCW::ENET0::ENET0::IO" value="MIO 16 .. 27" />
+  <set param="PCW::GPIO::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::GPIO::MIO_GPIO::ENABLE" value="1" />
+  <set param="PCW::GPIO::EMIO_GPIO::ENABLE" value="1" />
+  <set param="PCW::I2C1::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::UART0::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::UART0::UART0::IO" value="MIO 14 .. 15" />
+  <set param="PCW::UART1::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::UART1::UART1::IO" value="MIO 12 .. 13" />
+  <set param="PCW::USB0::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::SD0::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::SD0::GRP_CD::ENABLE" value="1" />
+  <set param="PCW::SD0::GRP_WP::ENABLE" value="1" />
+  <set param="PCW::FPGA0::PERIPHERAL::FREQMHZ" value="100" />
+  <set param="PCW::PRESET::FPGA::PARTNUMBER" value="xc7z020clg484-1" />
+  <set param="PCW::PRESET::FPGA::SPEED" value="-1" />
+  <set param="PCW::PRESET::BANK0::VOLTAGE" value="LVCMOS 3.3V" />
+  <set param="PCW::PRESET::BANK1::VOLTAGE" value="LVCMOS 1.8V" />
+  <set param="PCW::PRESET::GLOBAL::CONFIG" value="Default" />
+  <set param="PCW::PRESET::GLOBAL::DEFAULT" value="powerup" />
+  <set param="PCW::UIPARAM::DDR::PARTNO" value="MT41J256M16 RE-125" />
+  <set param="PCW::UIPARAM::DDR::BUS_WIDTH" value="32 Bit" />
+  <set param="PCW::UIPARAM::DDR::DQS_TO_CLK_DELAY_0" value="-0.001" />
+  <set param="PCW::UIPARAM::DDR::DQS_TO_CLK_DELAY_1" value="-0.002" />
+  <set param="PCW::UIPARAM::DDR::DQS_TO_CLK_DELAY_2" value="-0.001" />
+  <set param="PCW::UIPARAM::DDR::DQS_TO_CLK_DELAY_3" value="-0.008" />
+  <set param="PCW::UIPARAM::DDR::BOARD_DELAY0" value="0.010" />
+  <set param="PCW::UIPARAM::DDR::BOARD_DELAY1" value="0.010" />
+  <set param="PCW::UIPARAM::DDR::BOARD_DELAY2" value="0.010" />
+  <set param="PCW::UIPARAM::DDR::BOARD_DELAY3" value="0.013" />
+  <set param="PCW::MIO::MIO[40]::SLEW" value="fast" />
+  <set param="PCW::MIO::MIO[40]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[41]::SLEW" value="fast" />
+  <set param="PCW::MIO::MIO[41]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[42]::SLEW" value="fast" />
+  <set param="PCW::MIO::MIO[42]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[43]::SLEW" value="fast" />
+  <set param="PCW::MIO::MIO[43]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[44]::SLEW" value="fast" />
+  <set param="PCW::MIO::MIO[44]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[45]::SLEW" value="fast" />
+  <set param="PCW::MIO::MIO[45]::PULLUP" value="disabled" />
+</project>

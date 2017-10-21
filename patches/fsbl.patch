@@ -1,0 +1,18 @@
+--- fsbl_hooks.c.old
++++ fsbl_hooks.c
+@@ -54,6 +54,7 @@
+ #include "fsbl.h"
+ #include "xstatus.h"
+ #include "fsbl_hooks.h"
++#include "te_fsbl_hooks.h"
+ 
+ /************************** Variable Definitions *****************************/
+ 
+@@ -138,6 +139,7 @@ u32 FsblHookBeforeHandoff(void)
+ 	 * Errors to be stored in the status variable and returned
+ 	 */
+ 	fsbl_printf(DEBUG_INFO,"In FsblHookBeforeHandoff function \r\n");
++	Status = te_FsblHookBeforeHandoff();
+ 
+ 	return (Status);
+ }
