@@ -17,8 +17,11 @@
   <set param="PCW::UART1::UART1::IO" value="MIO 12 .. 13" />
   <set param="PCW::USB0::PERIPHERAL::ENABLE" value="1" />
   <set param="PCW::SD0::PERIPHERAL::ENABLE" value="1" />
-  <set param="PCW::SD0::GRP_CD::ENABLE" value="1" />
-  <set param="PCW::SD0::GRP_WP::ENABLE" value="1" />
+  <set param="PCW::SD0::SD0::IO" value="MIO 40 .. 45" />
+  <set param="PCW::SD1::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::SD1::SD1::IO" value="MIO 46 .. 51" />
+  <set param="PCW::QSPI::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::QSPI::GRP_FBCLK::ENABLE" value="1" />
   <set param="PCW::FPGA0::PERIPHERAL::FREQMHZ" value="100" />
   <set param="PCW::PRESET::FPGA::PARTNUMBER" value="xc7z020clg484-1" />
   <set param="PCW::PRESET::FPGA::SPEED" value="-1" />
@@ -48,4 +51,10 @@
   <set param="PCW::MIO::MIO[44]::PULLUP" value="disabled" />
   <set param="PCW::MIO::MIO[45]::SLEW" value="fast" />
   <set param="PCW::MIO::MIO[45]::PULLUP" value="disabled" />
+  <set param="PCW::MIO::MIO[46]::SLEW" value="fast" />
+  <set param="PCW::MIO::MIO[47]::SLEW" value="fast" />
+  <set param="PCW::MIO::MIO[48]::SLEW" value="fast" />
+  <set param="PCW::MIO::MIO[49]::SLEW" value="fast" />
+  <set param="PCW::MIO::MIO[50]::SLEW" value="fast" />
+  <set param="PCW::MIO::MIO[51]::SLEW" value="fast" />
 </project>
