@@ -1,6 +1,6 @@
 # Create processing_system7
 cell xilinx.com:ip:processing_system7:5.5 ps_0 {
-  PCW_IMPORT_BOARD_PRESET cfg/te0720_1cf.xml
+  PCW_IMPORT_BOARD_PRESET cfg/te0720-1cf.xml
 } {
   M_AXI_GP0_ACLK ps_0/FCLK_CLK0
   IIC_1 IIC_1
