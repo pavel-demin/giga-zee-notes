@@ -1,6 +1,6 @@
 diff -rupN old/u-boot-xlnx-xilinx-v2016.4/arch/arm/dts/Makefile u-boot-xlnx-xilinx-v2016.4/arch/arm/dts/Makefile
---- old/u-boot-xlnx-xilinx-v2016.4/arch/arm/dts/Makefile
-+++ u-boot-xlnx-xilinx-v2016.4/arch/arm/dts/Makefile
+--- old/u-boot-xlnx-xilinx-v2016.4/arch/arm/dts/Makefile	2016-11-24 07:46:28.000000000 +0100
++++ u-boot-xlnx-xilinx-v2016.4/arch/arm/dts/Makefile	2017-10-22 20:05:37.795615559 +0200
 @@ -97,7 +97,8 @@ dtb-$(CONFIG_ARCH_ZYNQ) += zynq-zc702.dt
  	zynq-zc770-xm010.dtb \
  	zynq-zc770-xm011.dtb \
@@ -11,15 +11,3 @@ diff -rupN old/u-boot-xlnx-xilinx-v2016.4/arch/arm/dts/Makefile u-boot-xlnx-xili
  dtb-$(CONFIG_ARCH_ZYNQMP) += \
  	zynqmp-ep108.dtb			\
  	zynqmp-zcu100.dtb			\
-diff -rupN old/u-boot-xlnx-xilinx-v2016.4/common/main.c u-boot-xlnx-xilinx-v2016.4/common/main.c
---- old/u-boot-xlnx-xilinx-v2016.4/common/main.c
-+++ u-boot-xlnx-xilinx-v2016.4/common/main.c
-@@ -63,6 +63,8 @@ void main_loop(void)
- 	if (cli_process_fdt(&s))
- 		cli_secure_boot_cmd(s);
- 
-+	setenv("fdt_high", "0x1E000000");
-+
- 	autoboot_command(s);
- 
- 	cli_loop();
