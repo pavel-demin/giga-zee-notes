@@ -20,7 +20,7 @@
 
 	memory {
 		device_type = "memory";
-		reg = <0x0 0x1E000000>;
+		reg = <0x0 0x3C000000>;
 	};
 
 	chosen {
