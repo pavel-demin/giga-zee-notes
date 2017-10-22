@@ -15,6 +15,7 @@
 	aliases {
 		ethernet0 = &gem0;
 		serial0 = &uart0;
+		mmc0 = &sdhci0;
 	};
 
 	memory {
