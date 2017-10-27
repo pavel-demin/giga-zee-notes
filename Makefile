@@ -41,8 +41,11 @@ LINUX_CFLAGS = "-O2 -march=armv7-a -mcpu=cortex-a9 -mtune=cortex-a9 -mfpu=neon -
 UBOOT_CFLAGS = "-O2 -march=armv7-a -mcpu=cortex-a9 -mtune=cortex-a9 -mfpu=neon -mfloat-abi=hard"
 ARMHF_CFLAGS = "-O2 -march=armv7-a -mcpu=cortex-a9 -mtune=cortex-a9 -mfpu=neon -mfloat-abi=hard"
 
-RTL_TAR = tmp/rtl8192cu-fixes-master.tar.gz
-RTL_URL = https://github.com/pvaret/rtl8192cu-fixes/archive/master.tar.gz
+RTL8188_TAR = tmp/rtl8188eu-master.tar.gz
+RTL8188_URL = https://github.com/lwfinger/rtl8188eu/archive/master.tar.gz
+
+RTL8192_TAR = tmp/rtl8192cu-fixes-master.tar.gz
+RTL8192_URL = https://github.com/pvaret/rtl8192cu-fixes/archive/master.tar.gz
 
 .PRECIOUS: tmp/cores/% tmp/%.xpr tmp/%.hwdef tmp/%.bit tmp/%.fsbl/executable.elf tmp/%.tree/system.dts
 
@@ -64,9 +67,13 @@ $(DTREE_TAR):
 	mkdir -p $(@D)
 	curl -L $(DTREE_URL) -o $@
 
-$(RTL_TAR):
+$(RTL8188_TAR):
 	mkdir -p $(@D)
-	curl -L $(RTL_URL) -o $@
+	curl -L $(RTL8188_URL) -o $@
+
+$(RTL8192_TAR):
+	mkdir -p $(@D)
+	curl -L $(RTL8192_URL) -o $@
 
 $(UBOOT_DIR): $(UBOOT_TAR)
 	mkdir -p $@
@@ -75,11 +82,13 @@ $(UBOOT_DIR): $(UBOOT_TAR)
 	cp patches/zynq_giga_zee_defconfig $@/configs
 	cp patches/zynq-giga-zee.dts $@/arch/arm/dts
 
-$(LINUX_DIR): $(LINUX_TAR) $(RTL_TAR)
+$(LINUX_DIR): $(LINUX_TAR) $(RTL8188_TAR) $(RTL8192_TAR)
 	mkdir -p $@
 	tar -zxf $< --strip-components=1 --directory=$@
+	mkdir -p $@/drivers/net/wireless/realtek/rtl8188eu
 	mkdir -p $@/drivers/net/wireless/realtek/rtl8192cu
-	tar -zxf $(RTL_TAR) --strip-components=1 --directory=$@/drivers/net/wireless/realtek/rtl8192cu
+	tar -zxf $(RTL8188_TAR) --strip-components=1 --directory=$@/drivers/net/wireless/realtek/rtl8188eu
+	tar -zxf $(RTL8192_TAR) --strip-components=1 --directory=$@/drivers/net/wireless/realtek/rtl8192cu
 	patch -d tmp -p 0 < patches/linux-xlnx-$(LINUX_TAG).patch
 
 $(DTREE_DIR): $(DTREE_TAR)
@@ -91,7 +100,7 @@ uImage: $(LINUX_DIR)
 	make -C $< ARCH=arm xilinx_zynq_defconfig
 	make -C $< ARCH=arm CFLAGS=$(LINUX_CFLAGS) \
 	  -j $(shell nproc 2> /dev/null || echo 1) \
-	  CROSS_COMPILE=arm-linux-gnueabihf- UIMAGE_LOADADDR=0x8000 uImage
+	  CROSS_COMPILE=arm-linux-gnueabihf- UIMAGE_LOADADDR=0x8000 uImage modules
 	cp $</arch/arm/boot/uImage $@
 
 tmp/u-boot.elf: $(UBOOT_DIR)
