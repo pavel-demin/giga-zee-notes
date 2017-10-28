@@ -1,7 +1,7 @@
 diff -rupN old/linux-xlnx-xilinx-v2016.4/arch/arm/configs/xilinx_zynq_defconfig linux-xlnx-xilinx-v2016.4/arch/arm/configs/xilinx_zynq_defconfig
 --- old/linux-xlnx-xilinx-v2016.4/arch/arm/configs/xilinx_zynq_defconfig
 +++ linux-xlnx-xilinx-v2016.4/arch/arm/configs/xilinx_zynq_defconfig
-@@ -239,3 +239,132 @@ CONFIG_RCU_CPU_STALL_TIMEOUT=60
+@@ -239,3 +239,133 @@ CONFIG_RCU_CPU_STALL_TIMEOUT=60
  CONFIG_FONTS=y
  CONFIG_FONT_8x8=y
  CONFIG_FONT_8x16=y
