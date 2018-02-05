@@ -3,7 +3,6 @@ cell xilinx.com:ip:processing_system7:5.5 ps_0 {
   PCW_IMPORT_BOARD_PRESET cfg/te0720-1cf.xml
 } {
   M_AXI_GP0_ACLK ps_0/FCLK_CLK0
-  IIC_1 IIC_1
 }
 
 # Create all required interconnections
@@ -12,6 +11,33 @@ apply_bd_automation -rule xilinx.com:bd_rule:processing_system7 -config {
   Master Disable
   Slave Disable
 } [get_bd_cells ps_0]
+
+# System controller support logic
+
+connect_bd_net [get_bd_ports PL_pin_P22] [get_bd_pins ps_0/I2C1_SDA_I]
+
+# Create util_vector_logic
+cell xilinx.com:ip:util_vector_logic:2.0 or_0 {
+  C_SIZE 1
+  C_OPERATION or
+} {
+  Op1 ps_0/I2C1_SDA_O
+  Op2 ps_0/I2C1_SDA_T
+  Res PL_pin_N22
+}
+
+# Create util_vector_logic
+cell xilinx.com:ip:util_vector_logic:2.0 or_1 {
+  C_SIZE 1
+  C_OPERATION or
+} {
+  Op1 ps_0/I2C1_SCL_O
+  Op2 ps_0/I2C1_SCL_T
+  Res ps_0/I2C1_SCL_I
+  Res PL_pin_L16
+}
+
+# LED blinker
 
 # Create c_counter_binary
 cell xilinx.com:ip:c_counter_binary:12.0 cntr_0 {

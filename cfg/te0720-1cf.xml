@@ -10,6 +10,8 @@
   <set param="PCW::GPIO::PERIPHERAL::ENABLE" value="1" />
   <set param="PCW::GPIO::MIO_GPIO::ENABLE" value="1" />
   <set param="PCW::GPIO::EMIO_GPIO::ENABLE" value="1" />
+  <set param="PCW::I2C0::PERIPHERAL::ENABLE" value="1" />
+  <set param="PCW::I2C0::I2C0::IO" value="MIO 10 .. 11" />
   <set param="PCW::I2C1::PERIPHERAL::ENABLE" value="1" />
   <set param="PCW::UART0::PERIPHERAL::ENABLE" value="1" />
   <set param="PCW::UART0::UART0::IO" value="MIO 14 .. 15" />
