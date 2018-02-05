@@ -37,7 +37,7 @@ cell xilinx.com:ip:util_vector_logic:2.0 or_1 {
   Res PL_pin_L16
 }
 
-# LED blinker
+# LED
 
 # Create c_counter_binary
 cell xilinx.com:ip:c_counter_binary:12.0 cntr_0 {
@@ -52,4 +52,15 @@ cell xilinx.com:ip:xlslice:1.0 slice_0 {
 } {
   Din cntr_0/Q
   Dout led_o
+}
+
+# DATA
+
+# Create util_ds_buf
+cell xilinx.com:ip:util_ds_buf:2.1 buf_0 {
+  C_SIZE 64
+  C_BUF_TYPE IBUFDS
+} {
+  IBUF_DS_P data_p_i
+  IBUF_DS_N data_n_i
 }
