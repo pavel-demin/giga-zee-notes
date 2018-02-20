@@ -1,0 +1,195 @@
+#!/usr/bin/env python
+
+# Control program for the Banc Cosmique system
+# Copyright (C) 2018  Universite catholique de Louvain (UCL), Belgium
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import sys
+import struct
+import time
+
+from functools import partial
+
+import numpy as np
+np.set_printoptions(formatter = {'int':hex})
+
+from PyQt5.uic import loadUiType
+from PyQt5.QtCore import QRegExp, QTimer, QSettings
+from PyQt5.QtGui import QRegExpValidator
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, QLabel, QLineEdit, QCheckBox, QSpinBox, QPushButton, QFileDialog, QDialog
+from PyQt5.QtNetwork import QAbstractSocket, QTcpSocket
+
+Ui_MuoScope, QMainWindow = loadUiType('muoscope.ui')
+
+class MuoScope(QMainWindow, Ui_MuoScope):
+  def __init__(self):
+    super(MuoScope, self).__init__()
+    self.setupUi(self)
+    # IP address validator
+    rx = QRegExp('^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$')
+    self.addrValue.setValidator(QRegExpValidator(rx, self.addrValue))
+    # state variables
+    self.idle = True
+    self.reading = False
+    # buffer and offset for the incoming samples
+    self.buffer = bytearray(64)
+    self.offset = 0
+    self.data = np.frombuffer(self.buffer, np.float32)
+    # configure widgets
+    self.discValue = {}
+    self.discFeedback = {}
+    self.monoValue = {}
+    self.monoFeedback = {}
+    for i in range(0, 8):
+      label = QLabel('CH' + str(i))
+      self.discLayout.addWidget(label, (i // 4) * 3 + 0, i % 4)
+      self.discValue[i] = QSpinBox()
+      self.discValue[i].setMaximum(511)
+      self.discValue[i].valueChanged.connect(partial(self.set_dac, i + i // 2 * 2 + 0))
+      self.discLayout.addWidget(self.discValue[i], (i // 4) * 3 + 1, i % 4)
+      self.discFeedback[i] = QLineEdit()
+      self.discFeedback[i].setReadOnly(True)
+      self.discLayout.addWidget(self.discFeedback[i], (i // 4) * 3 + 2, i % 4)
+    for i in range(0, 8):
+      label = QLabel('CH' + str(i))
+      self.monoLayout.addWidget(label, (i // 4) * 3 + 0, i % 4)
+      self.monoValue[i] = QSpinBox()
+      self.monoValue[i].setMaximum(1023)
+      self.monoValue[i].valueChanged.connect(partial(self.set_dac, i + i // 2 * 2 + 2))
+      self.monoLayout.addWidget(self.monoValue[i], (i // 4) * 3 + 1, i % 4)
+      self.monoFeedback[i] = QLineEdit()
+      self.monoFeedback[i].setReadOnly(True)
+      self.monoLayout.addWidget(self.monoFeedback[i], (i // 4) * 3 + 2, i % 4)
+    # read settings
+    settings = QSettings('muoscope.ini', QSettings.IniFormat)
+    self.read_cfg_settings(settings)
+    # create TCP socket
+    self.socket = QTcpSocket(self)
+    self.socket.connected.connect(self.connected)
+    self.socket.readyRead.connect(self.read_data)
+    self.socket.error.connect(self.display_error)
+    # connect signals from widgets
+    self.connectButton.clicked.connect(self.start)
+    self.writeButton.clicked.connect(self.write_cfg)
+    self.readButton.clicked.connect(self.read_cfg)
+    # create timers
+    self.startTimer = QTimer(self)
+    self.startTimer.timeout.connect(self.timeout)
+    self.adcTimer = QTimer(self)
+    self.adcTimer.timeout.connect(self.get_adc)
+
+  def start(self):
+    if self.idle:
+      self.connectButton.setEnabled(False)
+      self.socket.connectToHost(self.addrValue.text(), 1001)
+      self.startTimer.start(5000)
+    else:
+      self.stop()
+
+  def stop(self):
+    self.adcTimer.stop()
+    self.idle = True
+    self.socket.abort()
+    self.connectButton.setText('Connect')
+    self.connectButton.setEnabled(True)
+
+  def timeout(self):
+    self.display_error('timeout')
+
+  def connected(self):
+    self.startTimer.stop()
+    self.idle = False
+    self.connectButton.setText('Disconnect')
+    self.connectButton.setEnabled(True)
+    self.adcTimer.start(500)
+
+  def timeout(self):
+    self.display_error('timeout')
+
+  def display_error(self, socketError):
+    self.startTimer.stop()
+    if socketError == 'timeout':
+      QMessageBox.information(self, 'MuoScope', 'Error: connection timeout.')
+    else:
+      QMessageBox.information(self, 'MuoScope', 'Error: %s.' % self.socket.errorString())
+    self.stop()
+
+  def read_data(self):
+    while(self.socket.bytesAvailable() > 0):
+      if not self.reading:
+        self.socket.readAll()
+        return
+      size = self.socket.bytesAvailable()
+      limit = 64
+      if self.offset + size < limit:
+        self.buffer[self.offset:self.offset + size] = self.socket.read(size)
+        self.offset += size
+      else:
+        self.buffer[self.offset:limit] = self.socket.read(limit - self.offset)
+        self.reading = False
+        for i, item in self.discFeedback.items():
+          item.setText('%.3f' % self.data[i + i // 2 * 2 + 0])
+        for i, item in self.monoFeedback.items():
+          item.setText('%.3f' % self.data[i + i // 2 * 2 + 2])
+
+  def get_adc(self):
+    if self.idle: return
+    self.reading = True
+    self.socket.write(struct.pack('<I', 0<<24))
+
+  def set_dac(self, channel, value):
+    if self.idle: return
+    self.reading = True
+    self.socket.write(struct.pack('<I', 1<<24 | int(channel)<<16 | int(value)))
+
+  def write_cfg(self):
+    dialog = QFileDialog(self, 'Write configuration settings', '.', '*.ini')
+    dialog.setDefaultSuffix('ini')
+    dialog.selectFile('muoscope.ini')
+    dialog.setAcceptMode(QFileDialog.AcceptSave)
+    dialog.setOptions(QFileDialog.DontConfirmOverwrite)
+    if dialog.exec() == QDialog.Accepted:
+      name = dialog.selectedFiles()
+      settings = QSettings(name[0], QSettings.IniFormat)
+      self.write_cfg_settings(settings)
+
+  def read_cfg(self):
+    dialog = QFileDialog(self, 'Read configuration settings', '.', '*.ini')
+    dialog.setDefaultSuffix('ini')
+    dialog.selectFile('muoscope.ini')
+    dialog.setAcceptMode(QFileDialog.AcceptOpen)
+    if dialog.exec() == QDialog.Accepted:
+      name = dialog.selectedFiles()
+      settings = QSettings(name[0], QSettings.IniFormat)
+      self.read_cfg_settings(settings)
+
+  def write_cfg_settings(self, settings):
+    settings.setValue('addr', self.addrValue.text())
+    for i, item in self.discValue.items():
+      settings.setValue('disc_%d' % i, item.value())
+    for i, item in self.monoValue.items():
+      settings.setValue('mono_%d' % i, item.value())
+
+  def read_cfg_settings(self, settings):
+    self.addrValue.setText(settings.value('addr', '192.168.42.1'))
+    for i, item in self.discValue.items():
+      item.setValue(settings.value('disc_%d' % i, 0, type = int))
+    for i, item in self.monoValue.items():
+      item.setValue(settings.value('mono_%d' % i, 0, type = int))
+
+app = QApplication(sys.argv)
+window = MuoScope()
+window.show()
+sys.exit(app.exec_())
