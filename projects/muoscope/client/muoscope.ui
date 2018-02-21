@@ -62,12 +62,16 @@
       <item row="0" column="0">
        <widget class="QLabel" name="voltageLabel">
         <property name="text">
-         <string>Voltage, V</string>
+         <string>Voltage</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QSpinBox" name="voltageValue"/>
+       <widget class="QSpinBox" name="voltageValue">
+        <property name="maximum">
+         <number>4095</number>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLineEdit" name="voltageFeedback">
@@ -79,12 +83,16 @@
       <item row="0" column="1">
        <widget class="QLabel" name="currentLabel">
         <property name="text">
-         <string>Current, A</string>
+         <string>Current</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QSpinBox" name="currentValue"/>
+       <widget class="QSpinBox" name="currentValue">
+        <property name="maximum">
+         <number>4095</number>
+        </property>
+       </widget>
       </item>
       <item row="2" column="1">
        <widget class="QLineEdit" name="currentFeedback">
@@ -104,6 +112,13 @@
        <widget class="QCheckBox" name="stateValue">
         <property name="text">
          <string>ON</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="stateFeedback">
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

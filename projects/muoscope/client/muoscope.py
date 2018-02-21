@@ -44,7 +44,7 @@ class MuoScope(QMainWindow, Ui_MuoScope):
     self.idle = True
     self.reading = False
     # buffer and offset for the incoming samples
-    self.buffer = bytearray(64)
+    self.buffer = bytearray(84)
     self.offset = 0
     self.data = np.frombuffer(self.buffer, np.float32)
     # configure widgets
@@ -57,7 +57,7 @@ class MuoScope(QMainWindow, Ui_MuoScope):
       self.discLayout.addWidget(label, (i // 4) * 3 + 0, i % 4)
       self.discValue[i] = QSpinBox()
       self.discValue[i].setMaximum(511)
-      self.discValue[i].valueChanged.connect(partial(self.set_dac, i + i // 2 * 2 + 0))
+      self.discValue[i].valueChanged.connect(partial(self.set_disc, i))
       self.discLayout.addWidget(self.discValue[i], (i // 4) * 3 + 1, i % 4)
       self.discFeedback[i] = QLineEdit()
       self.discFeedback[i].setReadOnly(True)
@@ -67,11 +67,14 @@ class MuoScope(QMainWindow, Ui_MuoScope):
       self.monoLayout.addWidget(label, (i // 4) * 3 + 0, i % 4)
       self.monoValue[i] = QSpinBox()
       self.monoValue[i].setMaximum(1023)
-      self.monoValue[i].valueChanged.connect(partial(self.set_dac, i + i // 2 * 2 + 2))
+      self.monoValue[i].valueChanged.connect(partial(self.set_mono, i))
       self.monoLayout.addWidget(self.monoValue[i], (i // 4) * 3 + 1, i % 4)
       self.monoFeedback[i] = QLineEdit()
       self.monoFeedback[i].setReadOnly(True)
       self.monoLayout.addWidget(self.monoFeedback[i], (i // 4) * 3 + 2, i % 4)
+    self.voltageValue.valueChanged.connect(partial(self.set_hv, 0))
+    self.currentValue.valueChanged.connect(partial(self.set_hv, 1))
+    self.stateValue.stateChanged.connect(self.set_state)
     # read settings
     settings = QSettings('muoscope.ini', QSettings.IniFormat)
     self.read_cfg_settings(settings)
@@ -113,7 +116,14 @@ class MuoScope(QMainWindow, Ui_MuoScope):
     self.idle = False
     self.connectButton.setText('Disconnect')
     self.connectButton.setEnabled(True)
-    self.adcTimer.start(500)
+    for i, item in self.discValue.items():
+      self.set_disc(i, item.value())
+    for i, item in self.monoValue.items():
+      self.set_mono(i, item.value())
+    self.set_hv(0, self.voltageValue.value())
+    self.set_hv(1, self.currentValue.value())
+    self.set_state(self.stateValue.isChecked())
+    self.adcTimer.start(200)
 
   def timeout(self):
     self.display_error('timeout')
@@ -132,7 +142,7 @@ class MuoScope(QMainWindow, Ui_MuoScope):
         self.socket.readAll()
         return
       size = self.socket.bytesAvailable()
-      limit = 64
+      limit = 84
       if self.offset + size < limit:
         self.buffer[self.offset:self.offset + size] = self.socket.read(size)
         self.offset += size
@@ -143,16 +153,30 @@ class MuoScope(QMainWindow, Ui_MuoScope):
           item.setText('%.3f' % self.data[i + i // 2 * 2 + 0])
         for i, item in self.monoFeedback.items():
           item.setText('%.3f' % self.data[i + i // 2 * 2 + 2])
+        self.voltageFeedback.setText('%.3f' % self.data[17])
+        self.currentFeedback.setText('%.3f' % self.data[16])
+        self.stateFeedback.setText('%.0f' % self.data[20])
 
   def get_adc(self):
     if self.idle: return
     self.reading = True
     self.socket.write(struct.pack('<I', 0<<24))
 
-  def set_dac(self, channel, value):
+  def set_disc(self, channel, value):
     if self.idle: return
-    self.reading = True
-    self.socket.write(struct.pack('<I', 1<<24 | int(channel)<<16 | int(value)))
+    self.socket.write(struct.pack('<I', 1<<24 | int(channel + channel // 2 * 2 + 0)<<16 | int(value)))
+
+  def set_mono(self, channel, value):
+    if self.idle: return
+    self.socket.write(struct.pack('<I', 1<<24 | int(channel + channel // 2 * 2 + 2)<<16 | int(value)))
+
+  def set_hv(self, channel, value):
+    if self.idle: return
+    self.socket.write(struct.pack('<I', 2<<24 | int(channel)<<16 | int(value)))
+
+  def set_state(self, state):
+    if self.idle: return
+    self.socket.write(struct.pack('<I', 3<<24 | int(self.stateValue.isChecked())))
 
   def write_cfg(self):
     dialog = QFileDialog(self, 'Write configuration settings', '.', '*.ini')
@@ -181,6 +205,9 @@ class MuoScope(QMainWindow, Ui_MuoScope):
       settings.setValue('disc_%d' % i, item.value())
     for i, item in self.monoValue.items():
       settings.setValue('mono_%d' % i, item.value())
+    settings.setValue('voltage', self.voltageValue.value())
+    settings.setValue('current', self.currentValue.value())
+    settings.setValue('state', self.stateValue.isChecked())
 
   def read_cfg_settings(self, settings):
     self.addrValue.setText(settings.value('addr', '192.168.42.1'))
@@ -188,6 +215,9 @@ class MuoScope(QMainWindow, Ui_MuoScope):
       item.setValue(settings.value('disc_%d' % i, 0, type = int))
     for i, item in self.monoValue.items():
       item.setValue(settings.value('mono_%d' % i, 0, type = int))
+    self.voltageValue.setValue(settings.value('voltage', 0, type = int))
+    self.currentValue.setValue(settings.value('current', 0, type = int))
+    self.stateValue.setChecked(settings.value('state', False, type = bool))
 
 app = QApplication(sys.argv)
 window = MuoScope()
