@@ -56,7 +56,7 @@ void get_adc(int sock_client)
 
   ioctl(fd, I2C_SLAVE_FORCE, 0x27);
   read(fd, buffer, 1);
-  result[20] = buffer[0] >> 4 & 1 ^ 1;
+  result[20] = buffer[0] >> 4 & 1;
 
   send(sock_client, result, 84, MSG_NOSIGNAL);
 }
@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
           break;
         case 3:
           if(ioctl(fd, I2C_SLAVE_FORCE, 0x27) < 0) break;
-          buffer = data > 0 ? 0xEF : 0xFF;
+          buffer = data > 0 ? 0xFF : 0xEF;
           write(fd, &buffer, 1);
           break;
       }
