@@ -207,7 +207,6 @@ class MuoScope(QMainWindow, Ui_MuoScope):
       settings.setValue('mono_%d' % i, item.value())
     settings.setValue('voltage', self.voltageValue.value())
     settings.setValue('current', self.currentValue.value())
-    settings.setValue('state', self.stateValue.isChecked())
 
   def read_cfg_settings(self, settings):
     self.addrValue.setText(settings.value('addr', '192.168.42.1'))
@@ -217,7 +216,6 @@ class MuoScope(QMainWindow, Ui_MuoScope):
       item.setValue(settings.value('mono_%d' % i, 0, type = int))
     self.voltageValue.setValue(settings.value('voltage', 0, type = int))
     self.currentValue.setValue(settings.value('current', 0, type = int))
-    self.stateValue.setChecked(settings.value('state', False, type = bool))
 
 app = QApplication(sys.argv)
 window = MuoScope()
