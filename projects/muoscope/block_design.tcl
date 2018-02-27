@@ -111,6 +111,19 @@ cell pavel-demin:user:axis_detector_reader:1.0 det_0 {} {
   aresetn slice_1/Dout
 }
 
+# Create axis_subset_converter
+cell xilinx.com:ip:axis_subset_converter:1.1 subset_0 {
+  S_TDATA_NUM_BYTES.VALUE_SRC USER
+  M_TDATA_NUM_BYTES.VALUE_SRC USER
+  S_TDATA_NUM_BYTES 16
+  M_TDATA_NUM_BYTES 16
+  TDATA_REMAP {tdata[31:0],tdata[63:32],tdata[95:64],tdata[127:96]}
+} {
+  S_AXIS det_0/M_AXIS
+  aclk ps_0/FCLK_CLK0
+  aresetn slice_1/Dout
+}
+
 # Create fifo_generator
 cell xilinx.com:ip:fifo_generator:13.1 fifo_generator_0 {
   PERFORMANCE_OPTIONS First_Word_Fall_Through
@@ -130,7 +143,7 @@ cell pavel-demin:user:axis_fifo:1.0 fifo_0 {
   S_AXIS_TDATA_WIDTH 128
   M_AXIS_TDATA_WIDTH 32
 } {
-  S_AXIS det_0/M_AXIS
+  S_AXIS subset_0/M_AXIS
   FIFO_READ fifo_generator_0/FIFO_READ
   FIFO_WRITE fifo_generator_0/FIFO_WRITE
   aclk ps_0/FCLK_CLK0
