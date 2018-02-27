@@ -25,7 +25,7 @@ void get_adc(int sock_client)
 
   memset(result, 0, 84);
 
-  for(i = 0; i < 2; ++i)
+  for(i = 0; i < 4; ++i)
   {
     if(ioctl(fd, I2C_SLAVE_FORCE, i + 0x2A) < 0) continue;
 
