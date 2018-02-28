@@ -157,7 +157,7 @@ lbu commit -d
 
 apk add subversion make gcc
 
-for project in server
+for project in server muoscope
 do
   make -C /media/mmcblk0p1/apps/\$project clean
   make -C /media/mmcblk0p1/apps/\$project
