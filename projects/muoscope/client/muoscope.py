@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-# Control program for the Banc Cosmique system
-# Copyright (C) 2018  Universite catholique de Louvain (UCL), Belgium
+# Control program for the MuoScope system
+# Copyright (C) 2018  Pavel Demin
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -211,11 +211,11 @@ class MuoScope(QMainWindow, Ui_MuoScope):
   def read_cfg_settings(self, settings):
     self.addrValue.setText(settings.value('addr', '192.168.42.1'))
     for i, item in self.discValue.items():
-      item.setValue(settings.value('disc_%d' % i, 0, type = int))
+      item.setValue(settings.value('disc_%d' % i, 100, type = int))
     for i, item in self.monoValue.items():
-      item.setValue(settings.value('mono_%d' % i, 0, type = int))
+      item.setValue(settings.value('mono_%d' % i, 100, type = int))
     self.voltageValue.setValue(settings.value('voltage', 0, type = int))
-    self.currentValue.setValue(settings.value('current', 0, type = int))
+    self.currentValue.setValue(settings.value('current', 4095, type = int))
 
 app = QApplication(sys.argv)
 window = MuoScope()
