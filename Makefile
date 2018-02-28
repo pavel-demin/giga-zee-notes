@@ -14,8 +14,9 @@ PROC = ps7_cortexa9_0
 
 CORES = axi_axis_reader_v1_0 axi_axis_writer_v1_0 axi_bram_reader_v1_0 \
   axi_bram_writer_v1_0 axi_cfg_register_v1_0 axis_bram_reader_v1_0 \
-  axis_bram_writer_v1_0 axis_constant_v1_0 axis_fifo_v1_0 axis_lfsr_v1_0 \
-  axis_ram_writer_v1_0 axi_sts_register_v1_0 axis_variable_v1_0
+  axis_bram_writer_v1_0 axis_constant_v1_0 axis_detector_reader_v1_0 \
+  axis_fifo_v1_0 axis_lfsr_v1_0 axis_ram_writer_v1_0 axi_sts_register_v1_0 \
+  axis_variable_v1_0
 
 VIVADO = vivado -nolog -nojournal -mode batch
 HSI = hsi -nolog -nojournal -mode batch
