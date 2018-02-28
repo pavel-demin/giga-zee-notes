@@ -95,8 +95,15 @@ module axis_detector_reader
       end
       4:
       begin
-        int_tvalid_next = int_sum_reg >= cfg_data;
-        int_case_next = 3'd5;
+        if(int_sum_reg >= cfg_data)
+        begin
+          int_tvalid_next = 1'b1;
+          int_case_next = 3'd5;
+        end
+        else
+        begin
+          int_case_next = 3'd0;
+        end
       end
       5:
       begin
