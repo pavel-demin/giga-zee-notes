@@ -75,6 +75,7 @@ class MuoScope(QMainWindow, Ui_MuoScope):
     self.voltageValue.valueChanged.connect(partial(self.set_hv, 0))
     self.currentValue.valueChanged.connect(partial(self.set_hv, 1))
     self.stateValue.stateChanged.connect(self.set_state)
+    self.cutValue.valueChanged.connect(self.set_cut)
     # read settings
     settings = QSettings('muoscope.ini', QSettings.IniFormat)
     self.read_cfg_settings(settings)
@@ -123,6 +124,7 @@ class MuoScope(QMainWindow, Ui_MuoScope):
     self.set_hv(0, self.voltageValue.value())
     self.set_hv(1, self.currentValue.value())
     self.set_state(self.stateValue.isChecked())
+    self.set_cut(self.cutValue.value())
     self.adcTimer.start(200)
 
   def timeout(self):
@@ -178,6 +180,10 @@ class MuoScope(QMainWindow, Ui_MuoScope):
     if self.idle: return
     self.socket.write(struct.pack('<I', 3<<24 | int(self.stateValue.isChecked())))
 
+  def set_cut(self, value):
+    if self.idle: return
+    self.socket.write(struct.pack('<I', 4<<24 | int(value)))
+
   def write_cfg(self):
     dialog = QFileDialog(self, 'Write configuration settings', '.', '*.ini')
     dialog.setDefaultSuffix('ini')
@@ -207,6 +213,7 @@ class MuoScope(QMainWindow, Ui_MuoScope):
       settings.setValue('mono_%d' % i, item.value())
     settings.setValue('voltage', self.voltageValue.value())
     settings.setValue('current', self.currentValue.value())
+    settings.setValue('cut', self.cutValue.value())
 
   def read_cfg_settings(self, settings):
     self.addrValue.setText(settings.value('addr', '192.168.42.1'))
@@ -216,6 +223,7 @@ class MuoScope(QMainWindow, Ui_MuoScope):
       item.setValue(settings.value('mono_%d' % i, 100, type = int))
     self.voltageValue.setValue(settings.value('voltage', 0, type = int))
     self.currentValue.setValue(settings.value('current', 4095, type = int))
+    self.cutValue.setValue(settings.value('cut', 1, type = int))
 
 app = QApplication(sys.argv)
 window = MuoScope()

@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>420</width>
-    <height>560</height>
+    <width>480</width>
+    <height>640</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>420</width>
-    <height>560</height>
+    <width>480</width>
+    <height>640</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -139,6 +139,32 @@
       <string>MONOSTABLE</string>
      </property>
      <layout class="QGridLayout" name="monoLayout"/>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QGroupBox" name="coiGroup">
+     <property name="title">
+      <string>COINCIDENCE</string>
+     </property>
+     <layout class="QGridLayout" name="coiLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="cutLabel">
+        <property name="text">
+         <string>Number of hit detectors</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="cutValue">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>4</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
