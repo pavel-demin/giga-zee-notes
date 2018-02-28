@@ -77,7 +77,7 @@ cp -r alpine/apps $root_dir/media/mmcblk0p1/
 
 cp -r apks $root_dir/media/mmcblk0p1/
  
-for project in led_blinker
+for project in led_blinker muoscope
 do
   mkdir -p $root_dir/media/mmcblk0p1/apps/$project
   cp -r projects/$project/server/* $root_dir/media/mmcblk0p1/apps/$project/
