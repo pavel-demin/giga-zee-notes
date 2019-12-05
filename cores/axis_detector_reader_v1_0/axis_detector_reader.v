@@ -16,9 +16,9 @@ module axis_detector_reader
   output wire         m_axis_tvalid
 );
 
-  reg [63:0] int_data_reg[2:0], int_data_next[2:0];
+  reg [63:0] int_data_reg[5:0], int_data_next[5:0];
   reg [63:0] int_time_reg, int_time_next;
-  reg [5:0] int_cntr_reg, int_cntr_next;
+  reg [3:0] int_cntr_reg, int_cntr_next;
   reg [3:0] int_or_reg, int_or_next;
   reg [2:0] int_sum_reg, int_sum_next;
   reg [2:0] int_case_reg, int_case_next;
@@ -31,8 +31,11 @@ module axis_detector_reader
       int_data_reg[0] <= 64'd0;
       int_data_reg[1] <= 64'd0;
       int_data_reg[2] <= 64'd0;
+      int_data_reg[3] <= 64'd0;
+      int_data_reg[4] <= 64'd0;
+      int_data_reg[5] <= 64'd0;
       int_time_reg <= 64'd0;
-      int_cntr_reg <= 6'd0;
+      int_cntr_reg <= 4'd0;
       int_or_reg <= 4'd0;
       int_sum_reg <= 4'd0;
       int_case_reg <= 3'd0;
@@ -43,6 +46,9 @@ module axis_detector_reader
       int_data_reg[0] <= int_data_next[0];
       int_data_reg[1] <= int_data_next[1];
       int_data_reg[2] <= int_data_next[2];
+      int_data_reg[3] <= int_data_next[3];
+      int_data_reg[4] <= int_data_next[4];
+      int_data_reg[5] <= int_data_next[5];
       int_time_reg <= int_time_next;
       int_cntr_reg <= int_cntr_next;
       int_or_reg <= int_or_next;
@@ -56,7 +62,10 @@ module axis_detector_reader
   begin
     int_data_next[0] = det_data;
     int_data_next[1] = int_data_reg[0];
-    int_data_next[2] = int_data_reg[2];
+    int_data_next[2] = int_data_reg[1];
+    int_data_next[3] = int_data_reg[2];
+    int_data_next[4] = int_data_reg[3] & 64'h7ffe7ffe7ffe7ffe;
+    int_data_next[5] = int_data_reg[5];
     int_time_next = int_time_reg + 1'b1;
     int_cntr_next = int_cntr_reg;
     int_or_next = int_or_reg;
@@ -67,17 +76,17 @@ module axis_detector_reader
     case(int_case_reg)
       0:
       begin
-        if(|int_data_reg[1])
+        if(|int_data_reg[4])
         begin
           int_case_next = 3'd1;
-          int_cntr_next = 6'd0;
-          int_data_next[2] = int_data_reg[1];
+          int_cntr_next = 4'd0;
+          int_data_next[5] = int_data_reg[4];
         end
       end
       1:
       begin
         int_cntr_next = int_cntr_reg + 1'b1;
-        int_data_next[2] = int_data_reg[2] | int_data_reg[1];
+        int_data_next[5] = int_data_reg[5] | int_data_reg[4];
         if(&int_cntr_reg)
         begin
           int_case_next = 3'd2;
@@ -85,7 +94,7 @@ module axis_detector_reader
       end
       2:
       begin
-        int_or_next = {|int_data_reg[2][63:48], |int_data_reg[2][47:32], |int_data_reg[2][31:16], |int_data_reg[2][15:0]};
+        int_or_next = {|int_data_reg[5][63:48], |int_data_reg[5][47:32], |int_data_reg[5][31:16], |int_data_reg[5][15:0]};
         int_case_next = 3'd3;
       end
       3:
@@ -116,7 +125,7 @@ module axis_detector_reader
     endcase
   end
 
-  assign m_axis_tdata = {int_time_reg, int_data_reg[2]};
+  assign m_axis_tdata = {int_time_reg, int_data_reg[5]};
   assign m_axis_tvalid = int_tvalid_reg;
 
 endmodule
