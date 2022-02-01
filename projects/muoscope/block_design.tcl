@@ -1,5 +1,5 @@
 # Create processing_system7
-cell xilinx.com:ip:processing_system7:5.5 ps_0 {
+cell xilinx.com:ip:processing_system7 ps_0 {
   PCW_IMPORT_BOARD_PRESET cfg/te0720-1cf.xml
 } {
   M_AXI_GP0_ACLK ps_0/FCLK_CLK0
@@ -13,10 +13,10 @@ apply_bd_automation -rule xilinx.com:bd_rule:processing_system7 -config {
 } [get_bd_cells ps_0]
 
 # Create xlconstant
-cell xilinx.com:ip:xlconstant:1.1 const_0
+cell xilinx.com:ip:xlconstant const_0
 
 # Create proc_sys_reset
-cell xilinx.com:ip:proc_sys_reset:5.0 rst_0 {} {
+cell xilinx.com:ip:proc_sys_reset rst_0 {} {
   ext_reset_in const_0/dout
 }
 
@@ -25,7 +25,7 @@ cell xilinx.com:ip:proc_sys_reset:5.0 rst_0 {} {
 connect_bd_net [get_bd_ports PL_pin_P22] [get_bd_pins ps_0/I2C1_SDA_I]
 
 # Create util_vector_logic
-cell xilinx.com:ip:util_vector_logic:2.0 or_0 {
+cell xilinx.com:ip:util_vector_logic or_0 {
   C_SIZE 1
   C_OPERATION or
 } {
@@ -35,7 +35,7 @@ cell xilinx.com:ip:util_vector_logic:2.0 or_0 {
 }
 
 # Create util_vector_logic
-cell xilinx.com:ip:util_vector_logic:2.0 or_1 {
+cell xilinx.com:ip:util_vector_logic or_1 {
   C_SIZE 1
   C_OPERATION or
 } {
@@ -48,14 +48,14 @@ cell xilinx.com:ip:util_vector_logic:2.0 or_1 {
 # LED
 
 # Create c_counter_binary
-cell xilinx.com:ip:c_counter_binary:12.0 cntr_0 {
+cell xilinx.com:ip:c_counter_binary cntr_0 {
   Output_Width 32
 } {
   CLK ps_0/FCLK_CLK0
 }
 
 # Create xlslice
-cell xilinx.com:ip:xlslice:1.0 slice_0 {
+cell xilinx.com:ip:xlslice slice_0 {
   DIN_WIDTH 32 DIN_FROM 26 DIN_TO 26 DOUT_WIDTH 1
 } {
   Din cntr_0/Q
@@ -65,28 +65,28 @@ cell xilinx.com:ip:xlslice:1.0 slice_0 {
 # CFG
 
 # Create axi_cfg_register
-cell pavel-demin:user:axi_cfg_register:1.0 cfg_0 {
+cell pavel-demin:user:axi_cfg_register cfg_0 {
   CFG_DATA_WIDTH 64
   AXI_ADDR_WIDTH 32
   AXI_DATA_WIDTH 32
 }
 
 # Create xlslice
-cell xilinx.com:ip:xlslice:1.0 slice_1 {
+cell xilinx.com:ip:xlslice slice_1 {
   DIN_WIDTH 64 DIN_FROM 0 DIN_TO 0 DOUT_WIDTH 1
 } {
   Din cfg_0/cfg_data
 }
 
 # Create xlslice
-cell xilinx.com:ip:xlslice:1.0 slice_2 {
+cell xilinx.com:ip:xlslice slice_2 {
   DIN_WIDTH 64 DIN_FROM 1 DIN_TO 1 DOUT_WIDTH 1
 } {
   Din cfg_0/cfg_data
 }
 
 # Create xlslice
-cell xilinx.com:ip:xlslice:1.0 slice_3 {
+cell xilinx.com:ip:xlslice slice_3 {
   DIN_WIDTH 64 DIN_FROM 34 DIN_TO 32 DOUT_WIDTH 3
 } {
   Din cfg_0/cfg_data
@@ -95,7 +95,7 @@ cell xilinx.com:ip:xlslice:1.0 slice_3 {
 # DATA
 
 # Create util_ds_buf
-cell xilinx.com:ip:util_ds_buf:2.1 buf_0 {
+cell xilinx.com:ip:util_ds_buf buf_0 {
   C_SIZE 64
   C_BUF_TYPE IBUFDS
 } {
@@ -104,7 +104,7 @@ cell xilinx.com:ip:util_ds_buf:2.1 buf_0 {
 }
 
 # Create axis_detector_reader
-cell pavel-demin:user:axis_detector_reader:1.0 det_0 {} {
+cell pavel-demin:user:axis_detector_reader det_0 {} {
   det_data buf_0/IBUF_OUT
   cfg_data slice_3/Dout
   aclk ps_0/FCLK_CLK0
@@ -112,7 +112,7 @@ cell pavel-demin:user:axis_detector_reader:1.0 det_0 {} {
 }
 
 # Create axis_subset_converter
-cell xilinx.com:ip:axis_subset_converter:1.1 subset_0 {
+cell xilinx.com:ip:axis_subset_converter subset_0 {
   S_TDATA_NUM_BYTES.VALUE_SRC USER
   M_TDATA_NUM_BYTES.VALUE_SRC USER
   S_TDATA_NUM_BYTES 16
@@ -125,7 +125,7 @@ cell xilinx.com:ip:axis_subset_converter:1.1 subset_0 {
 }
 
 # Create fifo_generator
-cell xilinx.com:ip:fifo_generator:13.1 fifo_generator_0 {
+cell xilinx.com:ip:fifo_generator fifo_generator_0 {
   PERFORMANCE_OPTIONS First_Word_Fall_Through
   INPUT_DATA_WIDTH 128
   INPUT_DEPTH 512
@@ -139,7 +139,7 @@ cell xilinx.com:ip:fifo_generator:13.1 fifo_generator_0 {
 }
 
 # Create axis_fifo
-cell pavel-demin:user:axis_fifo:1.0 fifo_0 {
+cell pavel-demin:user:axis_fifo fifo_0 {
   S_AXIS_TDATA_WIDTH 128
   M_AXIS_TDATA_WIDTH 32
 } {
@@ -150,7 +150,7 @@ cell pavel-demin:user:axis_fifo:1.0 fifo_0 {
 }
 
 # Create axi_axis_reader
-cell pavel-demin:user:axi_axis_reader:1.0 reader_0 {
+cell pavel-demin:user:axi_axis_reader reader_0 {
   AXI_DATA_WIDTH 32
 } {
   S_AXIS fifo_0/M_AXIS
@@ -161,7 +161,7 @@ cell pavel-demin:user:axi_axis_reader:1.0 reader_0 {
 # STS
 
 # Create axi_sts_register
-cell pavel-demin:user:axi_sts_register:1.0 sts_0 {
+cell pavel-demin:user:axi_sts_register sts_0 {
   STS_DATA_WIDTH 32
   AXI_ADDR_WIDTH 32
   AXI_DATA_WIDTH 32
