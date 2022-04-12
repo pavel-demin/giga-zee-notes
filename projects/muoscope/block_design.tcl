@@ -87,6 +87,13 @@ cell xilinx.com:ip:xlslice slice_2 {
 
 # Create xlslice
 cell xilinx.com:ip:xlslice slice_3 {
+  DIN_WIDTH 64 DIN_FROM 2 DIN_TO 2 DOUT_WIDTH 1
+} {
+  Din cfg_0/cfg_data
+}
+
+# Create xlslice
+cell xilinx.com:ip:xlslice slice_4 {
   DIN_WIDTH 64 DIN_FROM 34 DIN_TO 32 DOUT_WIDTH 3
 } {
   Din cfg_0/cfg_data
@@ -106,9 +113,17 @@ cell xilinx.com:ip:util_ds_buf buf_0 {
 # Create axis_detector_reader
 cell pavel-demin:user:axis_detector_reader det_0 {} {
   det_data buf_0/IBUF_OUT
-  cfg_data slice_3/Dout
+  cfg_data slice_4/Dout
   aclk ps_0/FCLK_CLK0
   aresetn slice_1/Dout
+}
+
+# Create axis_detector_reader
+cell pavel-demin:user:test_detector_reader det_1 {} {
+  det_data buf_0/IBUF_OUT
+  test_data test_o
+  aclk ps_0/FCLK_CLK0
+  aresetn slice_2/Dout
 }
 
 # Create axis_subset_converter
@@ -135,7 +150,7 @@ cell xilinx.com:ip:fifo_generator fifo_generator_0 {
   READ_DATA_COUNT_WIDTH 12
 } {
   clk ps_0/FCLK_CLK0
-  srst slice_2/Dout
+  srst slice_3/Dout
 }
 
 # Create axis_fifo

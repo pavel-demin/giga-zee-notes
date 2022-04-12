@@ -53,8 +53,8 @@ int main(int argc, char *argv[])
   rst = ((uint8_t *)(cfg + 0));
 
   /* reset fifo */
-  *rst |= 2;
-  *rst &= ~2;
+  *rst |= 4;
+  *rst &= ~4;
 
   /* reset detector reader */
   *rst &= ~1;

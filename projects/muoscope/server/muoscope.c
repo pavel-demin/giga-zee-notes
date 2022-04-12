@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
   int yes = 1;
 
   volatile void *cfg;
-  volatile uint8_t *cut;
+  volatile uint8_t *rst, *cut;
 
   if((fd_mem = open("/dev/mem", O_RDWR)) < 0)
   {
@@ -168,7 +168,12 @@ int main(int argc, char *argv[])
 
   cfg = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ|PROT_WRITE, MAP_SHARED, fd_mem, 0x40001000);
 
+  rst = ((uint8_t *)(cfg + 0));
   cut = ((uint8_t *)(cfg + 4));
+
+  /* reset test module */
+  *rst &= ~2;
+  *rst |= 2;
 
   *cut = 2;
 
