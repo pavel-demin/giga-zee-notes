@@ -27,22 +27,10 @@
   <set param="PCW::PRESET::BANK1::VOLTAGE" value="LVCMOS 1.8V" />
   <set param="PCW::UIPARAM::DDR::PARTNO" value="MT41J256M16 RE-125" />
   <set param="PCW::UIPARAM::DDR::BUS_WIDTH" value="32 Bit" />
-  <set param="PCW::MIO::MIO[40]::SLEW" value="fast" />
   <set param="PCW::MIO::MIO[40]::PULLUP" value="disabled" />
-  <set param="PCW::MIO::MIO[41]::SLEW" value="fast" />
   <set param="PCW::MIO::MIO[41]::PULLUP" value="disabled" />
-  <set param="PCW::MIO::MIO[42]::SLEW" value="fast" />
   <set param="PCW::MIO::MIO[42]::PULLUP" value="disabled" />
-  <set param="PCW::MIO::MIO[43]::SLEW" value="fast" />
   <set param="PCW::MIO::MIO[43]::PULLUP" value="disabled" />
-  <set param="PCW::MIO::MIO[44]::SLEW" value="fast" />
   <set param="PCW::MIO::MIO[44]::PULLUP" value="disabled" />
-  <set param="PCW::MIO::MIO[45]::SLEW" value="fast" />
   <set param="PCW::MIO::MIO[45]::PULLUP" value="disabled" />
-  <set param="PCW::MIO::MIO[46]::SLEW" value="fast" />
-  <set param="PCW::MIO::MIO[47]::SLEW" value="fast" />
-  <set param="PCW::MIO::MIO[48]::SLEW" value="fast" />
-  <set param="PCW::MIO::MIO[49]::SLEW" value="fast" />
-  <set param="PCW::MIO::MIO[50]::SLEW" value="fast" />
-  <set param="PCW::MIO::MIO[51]::SLEW" value="fast" />
 </project>
