@@ -27,14 +27,6 @@
   <set param="PCW::PRESET::BANK1::VOLTAGE" value="LVCMOS 1.8V" />
   <set param="PCW::UIPARAM::DDR::PARTNO" value="MT41J256M16 RE-125" />
   <set param="PCW::UIPARAM::DDR::BUS_WIDTH" value="32 Bit" />
-  <set param="PCW::UIPARAM::DDR::DQS_TO_CLK_DELAY_0" value="-0.001" />
-  <set param="PCW::UIPARAM::DDR::DQS_TO_CLK_DELAY_1" value="-0.002" />
-  <set param="PCW::UIPARAM::DDR::DQS_TO_CLK_DELAY_2" value="-0.001" />
-  <set param="PCW::UIPARAM::DDR::DQS_TO_CLK_DELAY_3" value="-0.008" />
-  <set param="PCW::UIPARAM::DDR::BOARD_DELAY0" value="0.010" />
-  <set param="PCW::UIPARAM::DDR::BOARD_DELAY1" value="0.010" />
-  <set param="PCW::UIPARAM::DDR::BOARD_DELAY2" value="0.010" />
-  <set param="PCW::UIPARAM::DDR::BOARD_DELAY3" value="0.013" />
   <set param="PCW::MIO::MIO[40]::SLEW" value="fast" />
   <set param="PCW::MIO::MIO[40]::PULLUP" value="disabled" />
   <set param="PCW::MIO::MIO[41]::SLEW" value="fast" />
