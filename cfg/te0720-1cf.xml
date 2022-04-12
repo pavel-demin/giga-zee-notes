@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE project PUBLIC "project" "project.dtd" >
 <project version="1.0" >
-  <description >
-  </description>
-  <Projinfo Part="xc7z020clg484-1" DeviceSize="xc7z020" Package="clg484" Speed="-1" />
   <set param="PCW::ENET0::PERIPHERAL::ENABLE" value="1" />
   <set param="PCW::ENET0::GRP_MDIO::ENABLE" value="1" />
   <set param="PCW::ENET0::ENET0::IO" value="MIO 16 .. 27" />
@@ -26,12 +23,8 @@
   <set param="PCW::QSPI::PERIPHERAL::ENABLE" value="1" />
   <set param="PCW::QSPI::GRP_FBCLK::ENABLE" value="1" />
   <set param="PCW::FPGA0::PERIPHERAL::FREQMHZ" value="100" />
-  <set param="PCW::PRESET::FPGA::PARTNUMBER" value="xc7z020clg484-1" />
-  <set param="PCW::PRESET::FPGA::SPEED" value="-1" />
   <set param="PCW::PRESET::BANK0::VOLTAGE" value="LVCMOS 3.3V" />
   <set param="PCW::PRESET::BANK1::VOLTAGE" value="LVCMOS 1.8V" />
-  <set param="PCW::PRESET::GLOBAL::CONFIG" value="Default" />
-  <set param="PCW::PRESET::GLOBAL::DEFAULT" value="powerup" />
   <set param="PCW::UIPARAM::DDR::PARTNO" value="MT41J256M16 RE-125" />
   <set param="PCW::UIPARAM::DDR::BUS_WIDTH" value="32 Bit" />
   <set param="PCW::UIPARAM::DDR::DQS_TO_CLK_DELAY_0" value="-0.001" />
