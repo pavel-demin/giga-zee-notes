@@ -9,6 +9,8 @@ create_project -part $part_name $project_name tmp
 
 set_property IP_REPO_PATHS tmp/cores [current_project]
 
+update_ip_catalog
+
 set bd_path tmp/$project_name.srcs/sources_1/bd/system
 
 create_bd_design system
@@ -63,10 +65,19 @@ proc module {module_name module_body {module_ports {}}} {
   }
 }
 
+proc addr {offset range port master} {
+  set object [get_bd_intf_pins $port]
+  set segment [get_bd_addr_segs -of_objects $object]
+  set config [list Master $master Clk Auto]
+  apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config $config $object
+  assign_bd_address -offset $offset -range $range $segment
+}
+
 source projects/$project_name/block_design.tcl
 
 rename cell {}
 rename module {}
+rename addr {}
 
 if {[version -short] >= 2016.3} {
   set_property synth_checkpoint_mode None [get_files $bd_path/system.bd]
@@ -86,8 +97,6 @@ set files [glob -nocomplain cfg/*.xdc projects/$project_name/*.xdc]
 if {[llength $files] > 0} {
   add_files -norecurse -fileset constrs_1 $files
 }
-
-set_property VERILOG_DEFINE {TOOL_VIVADO} [current_fileset]
 
 set_property STRATEGY Flow_PerfOptimized_high [get_runs synth_1]
 set_property STRATEGY Performance_NetDelay_high [get_runs impl_1]

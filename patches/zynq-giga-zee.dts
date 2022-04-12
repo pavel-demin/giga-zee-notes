@@ -1,9 +1,7 @@
+// SPDX-License-Identifier: GPL-2.0+
 /*
- * GigaZee SoM DTS
- *
- * Copyright (C) 2013 Xilinx, Inc.
- *
- * SPDX-License-Identifier:	GPL-2.0+
+ *  Copyright (C) 2011 - 2015 Xilinx
+ *  Copyright (C) 2012 National Instruments Corp.
  */
 /dts-v1/;
 #include "zynq-7000.dtsi"
@@ -18,19 +16,19 @@
 		mmc0 = &sdhci0;
 	};
 
-	memory {
+	memory@0 {
 		device_type = "memory";
-		reg = <0x0 0x3C000000>;
+		reg = <0x0 0x40000000>;
 	};
 
 	chosen {
-		bootargs = "earlyprintk";
+		bootargs = "";
 		stdout-path = "serial0:115200n8";
 	};
 
 	usb_phy0: phy0 {
-		compatible = "usb-nop-xceiv";
 		#phy-cells = <0>;
+		compatible = "usb-nop-xceiv";
 	};
 };
 
@@ -45,6 +43,7 @@
 
 	ethernet_phy: ethernet-phy@1 {
 		reg = <1>;
+		device_type = "ethernet-phy";
 	};
 };
 
