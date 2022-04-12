@@ -11,7 +11,6 @@ module axis_detector_reader
   input  wire [2:0]   cfg_data,
 
   // Master side
-  input  wire         m_axis_tready,
   output wire [127:0] m_axis_tdata,
   output wire         m_axis_tvalid
 );
@@ -116,11 +115,8 @@ module axis_detector_reader
       end
       5:
       begin
-        if(m_axis_tready)
-        begin
-          int_tvalid_next = 1'b0;
-          int_case_next = 3'd0;
-        end
+        int_tvalid_next = 1'b0;
+        int_case_next = 3'd0;
       end
     endcase
   end
