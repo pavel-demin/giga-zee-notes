@@ -22,7 +22,7 @@
   <set param="PCW::SD1::SD1::IO" value="MIO 46 .. 51" />
   <set param="PCW::QSPI::PERIPHERAL::ENABLE" value="1" />
   <set param="PCW::QSPI::GRP_FBCLK::ENABLE" value="1" />
-  <set param="PCW::FPGA0::PERIPHERAL::FREQMHZ" value="100" />
+  <set param="PCW::FPGA0::PERIPHERAL::FREQMHZ" value="200" />
   <set param="PCW::PRESET::BANK0::VOLTAGE" value="LVCMOS 3.3V" />
   <set param="PCW::PRESET::BANK1::VOLTAGE" value="LVCMOS 1.8V" />
   <set param="PCW::UIPARAM::DDR::PARTNO" value="MT41J256M16 RE-125" />
