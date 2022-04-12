@@ -1,31 +1,31 @@
-alpine_url=http://dl-cdn.alpinelinux.org/alpine/v3.6
+alpine_url=http://dl-cdn.alpinelinux.org/alpine/v3.14
 
-uboot_tar=alpine-uboot-3.6.2-armhf.tar.gz
-uboot_url=$alpine_url/releases/armhf/$uboot_tar
+uboot_tar=alpine-uboot-3.14.2-armv7.tar.gz
+uboot_url=$alpine_url/releases/armv7/$uboot_tar
 
-tools_tar=apk-tools-static-2.7.5-r0.apk
-tools_url=$alpine_url/main/armhf/$tools_tar
+tools_tar=apk-tools-static-2.12.7-r0.apk
+tools_url=$alpine_url/main/armv7/$tools_tar
 
-firmware_tar=linux-firmware-20170330-r1.apk
-firmware_url=$alpine_url/main/armhf/$firmware_tar
+firmware_tar=linux-firmware-other-20210716-r0.apk
+firmware_url=$alpine_url/main/armv7/$firmware_tar
 
-linux_dir=tmp/linux-xlnx-xilinx-v2016.4
-linux_ver=4.6.0-xilinx
+linux_dir=tmp/linux-5.10
+linux_ver=5.10.107-xilinx
 
 modules_dir=alpine-modloop/lib/modules/$linux_ver
-
-apks_tar=apks.tgz
-apks_url=https://www.dropbox.com/sh/5fy49wae6xwxa8a/AADaQEPEtSBiYXU814k4jDR4a/apks.tgz?dl=1
 
 passwd=changeme
 
 test -f $uboot_tar || curl -L $uboot_url -o $uboot_tar
 test -f $tools_tar || curl -L $tools_url -o $tools_tar
-test -f $firmware_tar || curl -L $firmware_url -o $firmware_tar
-test -f $apks_tar || curl -L $apks_url -o $apks_tar
 
-tar -zxf $apks_tar
-touch apks/.boot_repository
+test -f $firmware_tar || curl -L $firmware_url -o $firmware_tar
+
+for tar in linux-firmware-ath9k_htc-20210716-r0.apk linux-firmware-brcm-20210716-r0.apk linux-firmware-cypress-20210716-r0.apk linux-firmware-rtlwifi-20210716-r0.apk
+do
+  url=$alpine_url/main/armv7/$tar
+  test -f $tar || curl -L $url -o $tar
+done
 
 mkdir alpine-uboot
 tar -zxf $uboot_tar --directory=alpine-uboot
@@ -36,10 +36,11 @@ tar -zxf $tools_tar --directory=alpine-apk --warning=no-unknown-keyword
 mkdir alpine-initramfs
 cd alpine-initramfs
 
-gzip -dc ../alpine-uboot/boot/initramfs-hardened | cpio -id
+gzip -dc ../alpine-uboot/boot/initramfs-lts | cpio -id
 rm -rf etc/modprobe.d
 rm -rf lib/firmware
 rm -rf lib/modules
+rm -rf var
 find . | sort | cpio --quiet -o -H newc | gzip -9 > ../initrd.gz
 
 cd ..
@@ -54,7 +55,12 @@ cp $linux_dir/modules.order $linux_dir/modules.builtin $modules_dir/
 
 depmod -a -b alpine-modloop $linux_ver
 
-tar -zxf $firmware_tar --directory=alpine-modloop/lib/modules --warning=no-unknown-keyword --strip-components=1 --wildcards lib/firmware/ar* lib/firmware/ath* lib/firmware/brcm* lib/firmware/ht* lib/firmware/rt* lib/firmware/RT*
+tar -zxf $firmware_tar --directory=alpine-modloop/lib/modules --warning=no-unknown-keyword --strip-components=1 --wildcards lib/firmware/ar* lib/firmware/rt*
+
+for tar in linux-firmware-ath9k_htc-20210716-r0.apk linux-firmware-brcm-20210716-r0.apk linux-firmware-cypress-20210716-r0.apk linux-firmware-rtlwifi-20210716-r0.apk
+do
+  tar -zxf $tar --directory=alpine-modloop/lib/modules --warning=no-unknown-keyword --strip-components=1
+done
 
 mksquashfs alpine-modloop/lib modloop -b 1048576 -comp xz -Xdict-size 100%
 
@@ -75,8 +81,6 @@ ln -s /media/mmcblk0p1/cache $root_dir/etc/apk/cache
 cp -r alpine/etc $root_dir/
 cp -r alpine/apps $root_dir/media/mmcblk0p1/
 
-cp -r apks $root_dir/media/mmcblk0p1/
- 
 for project in led_blinker muoscope
 do
   mkdir -p $root_dir/media/mmcblk0p1/apps/$project
@@ -89,36 +93,34 @@ cp -r alpine-apk/sbin $root_dir/
 
 chroot $root_dir /sbin/apk.static --repository $alpine_url/main --update-cache --allow-untrusted --initdb add alpine-base
 
-echo /media/mmcblk0p1/apks > $root_dir/etc/apk/repositories
-echo $alpine_url/main >> $root_dir/etc/apk/repositories
+echo $alpine_url/main > $root_dir/etc/apk/repositories
 echo $alpine_url/community >> $root_dir/etc/apk/repositories
 
 chroot $root_dir /bin/sh <<- EOF_CHROOT
 
 apk update
-apk add openssh iw wpa_supplicant dhcpcd dnsmasq hostapd-rtl871xdrv iptables avahi dcron chrony gpsd-timepps musl-dev fftw-dev libconfig-dev alsa-lib-dev alsa-utils curl wget less nano bc screen
+apk add openssh ucspi-tcp6 iw wpa_supplicant dhcpcd dnsmasq hostapd iptables avahi dbus dcron chrony gpsd musl-dev fftw-dev libconfig-dev alsa-lib-dev alsa-utils curl wget less nano bc dos2unix
 
-ln -s /etc/init.d/bootmisc etc/runlevels/boot/bootmisc
-ln -s /etc/init.d/hostname etc/runlevels/boot/hostname
-ln -s /etc/init.d/hwdrivers etc/runlevels/boot/hwdrivers
-ln -s /etc/init.d/modloop etc/runlevels/boot/modloop
-ln -s /etc/init.d/swclock etc/runlevels/boot/swclock
-ln -s /etc/init.d/sysctl etc/runlevels/boot/sysctl
-ln -s /etc/init.d/syslog etc/runlevels/boot/syslog
-ln -s /etc/init.d/urandom etc/runlevels/boot/urandom
+rc-update add bootmisc boot
+rc-update add hostname boot
+rc-update add hwdrivers boot
+rc-update add modloop boot
+rc-update add swclock boot
+rc-update add sysctl boot
+rc-update add syslog boot
+rc-update add urandom boot
 
-ln -s /etc/init.d/killprocs etc/runlevels/shutdown/killprocs
-ln -s /etc/init.d/mount-ro etc/runlevels/shutdown/mount-ro
-ln -s /etc/init.d/savecache etc/runlevels/shutdown/savecache
+rc-update add killprocs shutdown
+rc-update add mount-ro shutdown
+rc-update add savecache shutdown
 
-ln -s /etc/init.d/devfs etc/runlevels/sysinit/devfs
-ln -s /etc/init.d/dmesg etc/runlevels/sysinit/dmesg
-ln -s /etc/init.d/mdev etc/runlevels/sysinit/mdev
+rc-update add devfs sysinit
+rc-update add dmesg sysinit
+rc-update add mdev sysinit
 
 rc-update add avahi-daemon default
 rc-update add chronyd default
 rc-update add dhcpcd default
-rc-update add inetd default
 rc-update add local default
 rc-update add dcron default
 rc-update add sshd default
@@ -155,7 +157,7 @@ lbu delete root/.ash_history
 
 lbu commit -d
 
-apk add subversion make gcc
+apk add make gcc
 
 for project in server muoscope
 do
@@ -173,8 +175,8 @@ cp -r alpine/wifi .
 
 hostname -F /etc/hostname
 
-rm -rf $root_dir alpine-apk 
+rm -rf $root_dir alpine-apk
 
-zip -r giga-zee-alpine-3.6-armhf-`date +%Y%m%d`.zip apks apps boot.bin cache devicetree.dtb giga-zee.apkovl.tar.gz modloop uEnv.txt uImage uInitrd wifi
+zip -r giga-zee-alpine-3.14-armv7-`date +%Y%m%d`.zip apps boot.bin cache devicetree.dtb giga-zee.apkovl.tar.gz modloop uEnv.txt uImage uInitrd wifi
 
-rm -rf apks apps cache giga-zee.apkovl.tar.gz modloop uInitrd wifi
+rm -rf apps cache giga-zee.apkovl.tar.gz modloop uInitrd wifi

@@ -4,11 +4,9 @@
 #include <string.h>
 #include <sys/stat.h>
 
-const char *startsh = "/start.sh";
-const char *indexhtml = "/index.html";
 const char *directory = "/media/mmcblk0p1/apps";
 const char *forbidden = "HTTP/1.0 403 Forbidden\n\n";
-const char *notfound = "HTTP/1.0 404 Not Found\n\n";
+const char *redirect = "HTTP/1.0 302 Found\nLocation: /\n\n";
 const char *okheader = "HTTP/1.0 200 OK\n\n";
 
 void detach(char *path)
@@ -18,14 +16,14 @@ void detach(char *path)
   close(STDIN_FILENO);
   close(STDOUT_FILENO);
   close(STDERR_FILENO);
-  execvp(path, NULL);
+  execlp(path, path, NULL);
   exit(0);
 }
 
 int main()
 {
   FILE *fp;
-  int i, j;
+  int i, j, top;
   struct stat sb;
   size_t size;
   char buffer[256];
@@ -49,16 +47,18 @@ int main()
     return 1;
   }
 
-  for(i = 4; i < 255; ++i)
+  top = 1;
+  for(i = 5; i < 255; ++i)
   {
     if(buffer[i] == ' ')
     {
       buffer[i] = 0;
       break;
     }
+    if(buffer[i] != '/') top = 0;
   }
 
-  for(j = 0; j < i - 1; ++j)
+  for(j = 5; j < i - 1; ++j)
   {
     if(buffer[j] == '.' && buffer[j + 1] == '.')
     {
@@ -72,22 +72,22 @@ int main()
 
   if(stat(path, &sb) < 0)
   {
-    fwrite(notfound, 24, 1, stdout);
+    fwrite(redirect, 32, 1, stdout);
     return 1;
   }
 
   if(S_ISDIR(sb.st_mode))
   {
-    memcpy(path + 21 + i - 4, startsh, 10);
+    memcpy(path + 21 + i - 4, "/start.sh", 10);
     detach(path);
-    memcpy(path + 21 + i - 4, indexhtml, 12);
+    memcpy(path + 21 + i - 4, "/index.html", 12);
   }
 
   fp = fopen(path, "r");
 
   if(fp == NULL)
   {
-    fwrite(notfound, 24, 1, stdout);
+    fwrite(redirect, 32, 1, stdout);
     return 1;
   }
 
