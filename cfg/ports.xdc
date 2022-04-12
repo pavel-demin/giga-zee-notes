@@ -32,6 +32,13 @@ set_property DRIVE 4 [get_ports {led_o[*]}]
 set_property PACKAGE_PIN R7 [get_ports {led_o[0]}]
 set_property PACKAGE_PIN U7 [get_ports {led_o[1]}]
 
+### TEST
+
+set_property IOSTANDARD LVCMOS18 [get_ports {test_o[*]}]
+
+set_property PACKAGE_PIN AB1 [get_ports {test_o[0]}]
+set_property PACKAGE_PIN AB2 [get_ports {test_o[1]}]
+
 ### DATA
 
 set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports {data_p_i[*]}]
