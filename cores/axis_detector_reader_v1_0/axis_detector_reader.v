@@ -64,7 +64,7 @@ module axis_detector_reader
     int_data_next[1] = int_data_reg[0];
     int_data_next[2] = int_data_reg[1];
     int_data_next[3] = int_data_reg[2];
-    int_data_next[4] = int_data_reg[3] & 64'h7ffe7ffe7ffe7ffe;
+    int_data_next[4] = int_data_reg[3];
     int_data_next[5] = int_data_reg[5];
     int_time_next = int_time_reg + 1'b1;
     int_cntr_next = int_cntr_reg;
