@@ -8,12 +8,13 @@ module test_detector_reader
   input  wire         aresetn,
 
   input  wire [63:0]  det_data,
+  input  wire [10:0]  cfg_data,
 
   output wire [1:0]   test_data
 );
 
   reg [63:0] int_data_reg, int_data_next;
-  reg [3:0] int_cntr_reg, int_cntr_next;
+  reg [7:0] int_cntr_reg, int_cntr_next;
   reg int_case_reg, int_case_next;
 
   wire [63:0] int_data_wire;
@@ -36,7 +37,7 @@ module test_detector_reader
     if(~aresetn)
     begin
       int_data_reg <= 64'd0;
-      int_cntr_reg <= 4'd0;
+      int_cntr_reg <= 8'd0;
       int_case_reg <= 1'b0;
     end
     else
@@ -56,7 +57,7 @@ module test_detector_reader
     case(int_case_reg)
       0:
       begin
-        int_cntr_next = 4'd0;
+        int_cntr_next = 8'd0;
         int_data_next = int_data_wire;
         if(|int_data_wire)
         begin
@@ -67,7 +68,7 @@ module test_detector_reader
       begin
         int_cntr_next = int_cntr_reg + 1'b1;
         int_data_next = int_data_reg | int_data_wire;
-        if(&int_cntr_reg)
+        if(int_cntr_reg >= cfg_data[7:0])
         begin
           int_case_next = 1'b0;
         end

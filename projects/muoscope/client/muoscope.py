@@ -75,6 +75,7 @@ class MuoScope(QMainWindow, Ui_MuoScope):
     self.voltageValue.valueChanged.connect(partial(self.set_hv, 0))
     self.currentValue.valueChanged.connect(partial(self.set_hv, 1))
     self.stateValue.stateChanged.connect(self.set_state)
+    self.wndValue.valueChanged.connect(self.set_wnd)
     self.cutValue.valueChanged.connect(self.set_cut)
     # read settings
     settings = QSettings('muoscope.ini', QSettings.IniFormat)
@@ -124,6 +125,7 @@ class MuoScope(QMainWindow, Ui_MuoScope):
     self.set_hv(0, self.voltageValue.value())
     self.set_hv(1, self.currentValue.value())
     self.set_state(self.stateValue.isChecked())
+    self.set_wnd(self.wndValue.value())
     self.set_cut(self.cutValue.value())
     self.adcTimer.start(200)
 
@@ -180,9 +182,13 @@ class MuoScope(QMainWindow, Ui_MuoScope):
     if self.idle: return
     self.socket.write(struct.pack('<I', 3<<24 | int(self.stateValue.isChecked())))
 
-  def set_cut(self, value):
+  def set_wnd(self, value):
     if self.idle: return
     self.socket.write(struct.pack('<I', 4<<24 | int(value)))
+
+  def set_cut(self, value):
+    if self.idle: return
+    self.socket.write(struct.pack('<I', 5<<24 | int(value)))
 
   def write_cfg(self):
     dialog = QFileDialog(self, 'Write configuration settings', '.', '*.ini')

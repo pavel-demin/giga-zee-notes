@@ -8,7 +8,7 @@ module axis_detector_reader
   input  wire         aresetn,
 
   input  wire [63:0]  det_data,
-  input  wire [2:0]   cfg_data,
+  input  wire [10:0]  cfg_data,
 
   // Master side
   output wire [127:0] m_axis_tdata,
@@ -17,7 +17,7 @@ module axis_detector_reader
 
   reg [63:0] int_data_reg, int_data_next;
   reg [63:0] int_time_reg, int_time_next;
-  reg [3:0] int_cntr_reg, int_cntr_next;
+  reg [7:0] int_cntr_reg, int_cntr_next;
   reg [3:0] int_or_reg, int_or_next;
   reg [2:0] int_sum_reg, int_sum_next;
   reg [2:0] int_case_reg, int_case_next;
@@ -44,7 +44,7 @@ module axis_detector_reader
     begin
       int_data_reg <= 64'd0;
       int_time_reg <= 64'd0;
-      int_cntr_reg <= 4'd0;
+      int_cntr_reg <= 8'd0;
       int_or_reg <= 4'd0;
       int_sum_reg <= 4'd0;
       int_case_reg <= 3'd0;
@@ -75,7 +75,7 @@ module axis_detector_reader
     case(int_case_reg)
       0:
       begin
-        int_cntr_next = 4'd0;
+        int_cntr_next = 8'd0;
         int_data_next = int_data_wire;
         if(|int_data_wire)
         begin
@@ -86,7 +86,7 @@ module axis_detector_reader
       begin
         int_cntr_next = int_cntr_reg + 1'b1;
         int_data_next = int_data_reg | int_data_wire;
-        if(&int_cntr_reg)
+        if(int_cntr_reg >= cfg_data[7:0])
         begin
           int_case_next = 3'd2;
         end
@@ -103,7 +103,7 @@ module axis_detector_reader
       end
       4:
       begin
-        if(int_sum_reg >= cfg_data)
+        if(int_sum_reg >= cfg_data[10:8])
         begin
           int_tvalid_next = 1'b1;
           int_case_next = 3'd5;
