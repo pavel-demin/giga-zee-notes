@@ -47,8 +47,8 @@ cell xilinx.com:ip:c_counter_binary cntr_0 {
 }
 
 # Create xlslice
-cell xilinx.com:ip:xlslice slice_0 {
-  DIN_WIDTH 32 DIN_FROM 26 DIN_TO 26 DOUT_WIDTH 1
+cell pavel-demin:user:port_slicer slice_0 {
+  DIN_WIDTH 32 DIN_FROM 26 DIN_TO 26
 } {
   Din cntr_0/Q
   Dout led_o
