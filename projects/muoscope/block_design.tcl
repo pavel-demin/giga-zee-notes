@@ -56,7 +56,7 @@ cell xilinx.com:ip:c_counter_binary cntr_0 {
 
 # Create xlslice
 cell pavel-demin:user:port_slicer slice_0 {
-  DIN_WIDTH 32 DIN_FROM 26 DIN_TO 26 DOUT_WIDTH 1
+  DIN_WIDTH 32 DIN_FROM 26 DIN_TO 26
 } {
   Din cntr_0/Q
   Dout led_o
@@ -110,9 +110,15 @@ cell xilinx.com:ip:util_ds_buf buf_0 {
   IBUF_DS_N data_n_i
 }
 
+# Create edge_detector
+cell pavel-demin:user:edge_detector edge_0 {} {
+  din buf_0/IBUF_OUT
+  aclk ps_0/FCLK_CLK0
+}
+
 # Create axis_detector_reader
 cell pavel-demin:user:axis_detector_reader det_0 {} {
-  det_data buf_0/IBUF_OUT
+  det_data edge_0/dout
   cfg_data slice_4/Dout
   aclk ps_0/FCLK_CLK0
   aresetn slice_1/Dout
@@ -120,7 +126,7 @@ cell pavel-demin:user:axis_detector_reader det_0 {} {
 
 # Create axis_detector_reader
 cell pavel-demin:user:test_detector_reader det_1 {} {
-  det_data buf_0/IBUF_OUT
+  det_data edge_0/dout
   cfg_data slice_4/Dout
   test_data test_o
   aclk ps_0/FCLK_CLK0

@@ -23,21 +23,6 @@ module axis_detector_reader
   reg [2:0] int_case_reg, int_case_next;
   reg int_tvalid_reg, int_tvalid_next;
 
-  wire [63:0] int_data_wire;
-
-  xpm_cdc_array_single #(
-    .DEST_SYNC_FF(4),
-    .INIT_SYNC_FF(0),
-    .SRC_INPUT_REG(0),
-    .SIM_ASSERT_CHK(0),
-    .WIDTH(64)
-  ) cdc_0 (
-    .src_in(det_data),
-    .src_clk(),
-    .dest_out(int_data_wire),
-    .dest_clk(aclk)
-  );
-
   always @(posedge aclk)
   begin
     if(~aresetn)
@@ -76,8 +61,8 @@ module axis_detector_reader
       0:
       begin
         int_cntr_next = 8'd0;
-        int_data_next = int_data_wire;
-        if(|int_data_wire)
+        int_data_next = det_data;
+        if(|det_data)
         begin
           int_case_next = 3'd1;
         end
@@ -85,7 +70,7 @@ module axis_detector_reader
       1:
       begin
         int_cntr_next = int_cntr_reg + 1'b1;
-        int_data_next = int_data_reg | int_data_wire;
+        int_data_next = int_data_reg | det_data;
         if(int_cntr_reg >= cfg_data[7:0])
         begin
           int_case_next = 3'd2;
