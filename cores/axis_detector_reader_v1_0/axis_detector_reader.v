@@ -7,8 +7,8 @@ module axis_detector_reader
   input  wire         aclk,
   input  wire         aresetn,
 
-  input  wire [63:0]  det_data,
-  input  wire [10:0]  cfg_data,
+  input  wire [63:0]  din,
+  input  wire [10:0]  cfg,
 
   // Master side
   output wire [127:0] m_axis_tdata,
@@ -61,8 +61,8 @@ module axis_detector_reader
       0:
       begin
         int_cntr_next = 8'd0;
-        int_data_next = det_data;
-        if(|det_data)
+        int_data_next = din;
+        if(|din)
         begin
           int_case_next = 3'd1;
         end
@@ -70,8 +70,8 @@ module axis_detector_reader
       1:
       begin
         int_cntr_next = int_cntr_reg + 1'b1;
-        int_data_next = int_data_reg | det_data;
-        if(int_cntr_reg >= cfg_data[7:0])
+        int_data_next = int_data_reg | din;
+        if(int_cntr_reg >= cfg[7:0])
         begin
           int_case_next = 3'd2;
         end
@@ -88,7 +88,7 @@ module axis_detector_reader
       end
       4:
       begin
-        if(int_sum_reg >= cfg_data[10:8])
+        if(int_sum_reg >= cfg[10:8])
         begin
           int_tvalid_next = 1'b1;
           int_case_next = 3'd5;
