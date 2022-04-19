@@ -66,35 +66,42 @@ cell pavel-demin:user:port_slicer slice_0 {
 
 # Create axi_cfg_register
 cell pavel-demin:user:axi_cfg_register cfg_0 {
-  CFG_DATA_WIDTH 32
+  CFG_DATA_WIDTH 64
   AXI_ADDR_WIDTH 32
   AXI_DATA_WIDTH 32
 }
 
 # Create xlslice
 cell pavel-demin:user:port_slicer slice_1 {
-  DIN_WIDTH 32 DIN_FROM 0 DIN_TO 0
+  DIN_WIDTH 64 DIN_FROM 0 DIN_TO 0
 } {
   Din cfg_0/cfg_data
 }
 
 # Create xlslice
 cell pavel-demin:user:port_slicer slice_2 {
-  DIN_WIDTH 32 DIN_FROM 1 DIN_TO 1
+  DIN_WIDTH 64 DIN_FROM 1 DIN_TO 1
 } {
   Din cfg_0/cfg_data
 }
 
 # Create xlslice
 cell pavel-demin:user:port_slicer slice_3 {
-  DIN_WIDTH 32 DIN_FROM 2 DIN_TO 2
+  DIN_WIDTH 64 DIN_FROM 2 DIN_TO 2
 } {
   Din cfg_0/cfg_data
 }
 
 # Create xlslice
 cell pavel-demin:user:port_slicer slice_4 {
-  DIN_WIDTH 32 DIN_FROM 26 DIN_TO 16
+  DIN_WIDTH 64 DIN_FROM 31 DIN_TO 16
+} {
+  Din cfg_0/cfg_data
+}
+
+# Create xlslice
+cell pavel-demin:user:port_slicer slice_5 {
+  DIN_WIDTH 64 DIN_FROM 42 DIN_TO 32
 } {
   Din cfg_0/cfg_data
 }
@@ -116,18 +123,25 @@ cell pavel-demin:user:edge_detector edge_0 {} {
   aclk ps_0/FCLK_CLK0
 }
 
-# Create axis_detector_reader
-cell pavel-demin:user:axis_detector_reader det_0 {} {
+# Create edge_detector
+cell pavel-demin:user:delay delay_0 {} {
   din edge_0/dout
   cfg slice_4/Dout
+  aclk ps_0/FCLK_CLK0
+}
+
+# Create axis_detector_reader
+cell pavel-demin:user:axis_detector_reader det_0 {} {
+  din delay_0/dout
+  cfg slice_5/Dout
   aclk ps_0/FCLK_CLK0
   aresetn slice_1/Dout
 }
 
 # Create axis_detector_reader
 cell pavel-demin:user:test_detector_reader det_1 {} {
-  din edge_0/dout
-  cfg slice_4/Dout
+  din delay_0/dout
+  cfg slice_5/Dout
   test test_o
   aclk ps_0/FCLK_CLK0
   aresetn slice_2/Dout
