@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
       fprintf(stderr, "Usage: setup t0 t1 t2 t3 t4 t5 t6 t7 m0 m1 m2 m3 m4 m5 m6 m7 d0 d1 d2 d3 w n v\n");
       fprintf(stderr, " t0-t7 - threshold\n");
       fprintf(stderr, " m0-m7 - monostable\n");
-      fprintf(stderr, " d0-m3 - delay\n");
+      fprintf(stderr, " d0-d3 - delay\n");
       fprintf(stderr, " w - window\n");
       fprintf(stderr, " n - number of hit detectors\n");
       fprintf(stderr, " v - high voltage\n");
