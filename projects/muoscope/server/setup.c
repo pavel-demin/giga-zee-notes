@@ -110,25 +110,26 @@ int main(int argc, char *argv[])
   int i, fd_mem;
   char *end;
   long number;
-  uint16_t n[23];
+  uint16_t n[24];
 
   volatile void *cfg;
   volatile uint8_t *rst, *wnd, *cut;
   volatile uint16_t *dly;
 
-  for(i = 0; i < 23; ++i)
+  for(i = 0; i < 24; ++i)
   {
     errno = 0;
-    number = (argc == 24) ? strtol(argv[i + 1], &end, 10) : -1;
+    number = (argc == 25) ? strtol(argv[i + 1], &end, 10) : -1;
     if(errno != 0 || end == argv[i + 1] || number < 0 || number > 4095)
     {
-      fprintf(stderr, "Usage: setup t0 t1 t2 t3 t4 t5 t6 t7 m0 m1 m2 m3 m4 m5 m6 m7 d0 d1 d2 d3 w n v\n");
+      fprintf(stderr, "Usage: setup t0 t1 t2 t3 t4 t5 t6 t7 m0 m1 m2 m3 m4 m5 m6 m7 d0 d1 d2 d3 w n v c\n");
       fprintf(stderr, " t0-t7 - threshold\n");
       fprintf(stderr, " m0-m7 - monostable\n");
       fprintf(stderr, " d0-d3 - delay\n");
       fprintf(stderr, " w - window\n");
       fprintf(stderr, " n - number of hit detectors\n");
-      fprintf(stderr, " v - high voltage\n");
+      fprintf(stderr, " v - voltage\n");
+      fprintf(stderr, " c - current\n");
       return EXIT_FAILURE;
     }
     n[i] = number;
@@ -190,6 +191,7 @@ int main(int argc, char *argv[])
   configure_hv();
   enable_hv();
   set_hv(0, n[22]);
+  set_hv(1, n[23]);
 
   return EXIT_SUCCESS;
 }
