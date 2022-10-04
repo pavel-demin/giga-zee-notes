@@ -25,20 +25,16 @@ int main(int argc, char *argv[])
   volatile uint64_t *fifo;
   uint64_t data[2];
 
-  if((fd_mem = open("/dev/mem", O_RDWR)) < 0)
+  if(argc < 2)
   {
-    perror("open");
+    fprintf(stderr, "Usage: dump file\n");
+    fprintf(stderr, " file - output file\n");
     return EXIT_FAILURE;
   }
 
-  sts = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ|PROT_WRITE, MAP_SHARED, fd_mem, 0x40000000);
-  cfg = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ|PROT_WRITE, MAP_SHARED, fd_mem, 0x40001000);
-  fifo = mmap(NULL, 2*sysconf(_SC_PAGESIZE), PROT_READ|PROT_WRITE, MAP_SHARED, fd_mem, 0x40002000);
-
-  if(argc < 2)
+  if((fd_mem = open("/dev/mem", O_RDWR)) < 0)
   {
-    printf("Usage: dump file\n");
-    printf("file - output file.\n");
+    perror("open");
     return EXIT_FAILURE;
   }
 
@@ -47,6 +43,10 @@ int main(int argc, char *argv[])
     perror("fopen");
     return EXIT_FAILURE;
   }
+
+  sts = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ|PROT_WRITE, MAP_SHARED, fd_mem, 0x40000000);
+  cfg = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ|PROT_WRITE, MAP_SHARED, fd_mem, 0x40001000);
+  fifo = mmap(NULL, 2*sysconf(_SC_PAGESIZE), PROT_READ|PROT_WRITE, MAP_SHARED, fd_mem, 0x40002000);
 
   cntr = ((uint16_t *)(sts + 0));
 
