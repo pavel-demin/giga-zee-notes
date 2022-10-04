@@ -8,7 +8,7 @@ muoscope: muoscope.c
 dump: dump.c
 	gcc $(CFLAGS) -o $@ $^ -lm
 
-dump: setup.c
+setup: setup.c
 	gcc $(CFLAGS) -o $@ $^ -lm
 
 clean:
