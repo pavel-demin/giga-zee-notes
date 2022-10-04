@@ -1,15 +1,9 @@
 CFLAGS = -O3 -march=armv7-a -mtune=cortex-a9 -mfpu=neon -mfloat-abi=hard
 
-all: muoscope dump setup
+all: muoscope dump setup hv
 
-muoscope: muoscope.c
-	gcc $(CFLAGS) -o $@ $^ -lm
-
-dump: dump.c
-	gcc $(CFLAGS) -o $@ $^ -lm
-
-setup: setup.c
+%: %.c
 	gcc $(CFLAGS) -o $@ $^ -lm
 
 clean:
-	rm -f muoscope dump setup
+	rm -f muoscope dump setup hv
