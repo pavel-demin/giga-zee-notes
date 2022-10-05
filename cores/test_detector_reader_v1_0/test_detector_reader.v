@@ -42,8 +42,8 @@ module test_detector_reader
     case(int_case_reg)
       0:
       begin
-        int_cntr_next = 8'd0;
         int_data_next = din;
+        int_cntr_next = 8'd0;
         if(|din)
         begin
           int_case_next = 1'b1;
@@ -51,8 +51,8 @@ module test_detector_reader
       end
       1:
       begin
-        int_cntr_next = int_cntr_reg + 1'b1;
         int_data_next = int_data_reg | din;
+        int_cntr_next = int_cntr_reg + 1'b1;
         if(int_cntr_reg >= cfg[7:0])
         begin
           int_case_next = 1'b0;
