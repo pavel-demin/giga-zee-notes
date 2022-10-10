@@ -75,6 +75,27 @@ The data acquisition system consists of the following subsystems:
   \item 4 groups of 16 RPC strips connected to CMS RPC frontend integrated circuits \cite{rpcnim2000} in the frontend modules
 \end{itemize}
 
+\subsection{High-voltage controller}
+
+The structure of the high-voltage controller is shown in figure \ref{fig:hvctrl_module}.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{images/hvctrl_module.pdf}
+  \caption{structure of the high-voltage controller}
+  \label{fig:hvctrl_module}
+\end{figure}
+
+The high-voltage controller can control up to four high-voltage power supplies and consists of the following components:
+\begin{itemize}[nosep]
+  \item 1 I/O expander for $\text{I}^\text{2}\text{C}$ bus (NXP PCF8574T) \cite{pcf8574t}
+  \item 2 digital to analog and analog to digital converters (Analog Devices AD5593R) \cite{ad5593r}
+\end{itemize}
+
+The I/O expander for $\text{I}^\text{2}\text{C}$ bus is used to enable or disable individually each of the four high-voltage power supplies.
+
+The DAC and ADC integrated circuits are used for controlling and monitoring the output voltage and current of the high-voltage power supplies.
+
 \subsection{Frontend module}
 
 The structure of the frontend module is shown in figure \ref{fig:rpcfe_module}.
@@ -115,30 +136,9 @@ The structure of the CMS RPC frontend integrated circuit is shown in figure \ref
 
 The detailed information about the CMS RPC frontend integrated circuit can be found in \cite{rpcnim2000}, \cite{lhcb2002} and \cite{rpcreview2000}.
 
-The 8 channels of the CMS RPC frontend integrated circuit operate independently. Each channel consists of a preamplifier, a gain stage, a zero-crossing discriminator, a monostable multivibrator and a differential LVDS line driver.
+The 8 channels of the CMS RPC frontend integrated circuit operate independently. Each channel consists of a transimpedance preamplifier, a gain stage, a zero-crossing discriminator, a monostable multivibrator and a differential LVDS line driver.
 
 The threshold of the zero-crossing discriminator and the duration of the output pulse of the monostable multivibrator are controlled by external voltage inputs $\text{V}_\text{threshold}$ and $\text{V}_\text{monostable}$. On the frontend module, these voltage inputs are connected to the outputs of the DAC integrated circuits.
-
-\subsection{High-voltage controller}
-
-The structure of the high-voltage controller is shown in figure \ref{fig:hvctrl_module}.
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{images/hvctrl_module.pdf}
-  \caption{structure of the high-voltage controller}
-  \label{fig:hvctrl_module}
-\end{figure}
-
-The high-voltage controller can control up to four high-voltage power supplies and consists of the following components:
-\begin{itemize}[nosep]
-  \item 1 I/O expander for $\text{I}^\text{2}\text{C}$ bus (NXP PCF8574T) \cite{pcf8574t}
-  \item 2 digital to analog and analog to digital converters (Analog Devices AD5593R) \cite{ad5593r}
-\end{itemize}
-
-The I/O expander for $\text{I}^\text{2}\text{C}$ bus is used to enable or disable individually each of the four high-voltage power supplies.
-
-The DAC and ADC integrated circuits are used for controlling and monitoring the output voltage and current of the high-voltage power supplies.
 
 \subsection{FPGA+CPU module}
 
@@ -219,6 +219,46 @@ This repository contains the following directories:
     \item shell script that builds the SD card image
   \end{itemize}
 \end{itemize}
+
+\subsection{Development environment}
+
+The development machine must have the following software installed:
+\begin{itemize}[nosep]
+    \item Linux operating system (for example Debian 11 or Ubuntu 22.04)
+    \item Xilinx toolchain (Vitis Core Development Kit 2020.2) \cite{vitis}
+\end{itemize}
+
+The packages required for the Xilinx toolchain and for the script that builds the SD card image can be installed with the following command:
+\vspace{-1ex}
+\begin{verbatim}
+apt-get --no-install-recommends install \
+  bc binfmt-support bison build-essential ca-certificates curl \
+  debootstrap device-tree-compiler dosfstools flex fontconfig git \
+  libgtk-3-0 libncurses-dev libssl-dev libtinfo5 parted qemu-user-static \
+  squashfs-tools sudo u-boot-tools x11-utils xvfb zerofree zip
+\end{verbatim}
+
+\subsection{SD card image}
+
+The SD card image is based on the lightweight Alpine Linux distribution \cite{alpine}.
+
+The SD card image zip file with all necessary files can be built with the following commands:
+\vspace{-1ex}
+\begin{verbatim}
+# setup Vitis and Vivado environment
+source /opt/Xilinx/Vitis/2020.2/settings64.sh
+
+# clone source code repository
+git clone https://github.com/pavel-demin/giga-zee-notes
+
+# go to giga-zee-notes directory
+cd giga-zee-notes
+
+# build SD card image zip file
+source helpers/build-all.sh
+\end{verbatim}
+
+To prepare an SD card, simply unzip the SD card image zip file to an SD card with a single partition and a FAT32 file system.
 
 \subsection{FPGA configuration}
 
@@ -310,18 +350,6 @@ The WiFi interface is configured in hotspot mode with the network name (SSID) an
 The Ethernet interface is configured to provide an IP address via DHCP to any directly connected computer. The IP address of the Ethernet interface is 192.168.43.1.
 
 The default password for the \texttt{root} account is \texttt{changeme}.
-
-\subsection{SD card image}
-
-The SD card image is based on the lightweight Alpine Linux distribution \cite{alpine}.
-
-The SD card image zip file with all necessary files can be built with the following command:
-\vspace{-1ex}
-\begin{verbatim}
-source helpers/build-all.sh
-\end{verbatim}
-
-To prepare an SD card, simply unzip the SD card image zip file to an SD card with a single partition and a FAT32 file system.
 
 \subsection{TCP server}
 

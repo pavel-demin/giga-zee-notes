@@ -1424,9 +1424,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.2426408"
-     inkscape:cx="247.40132"
-     inkscape:cy="119.84797"
+     inkscape:zoom="1.5"
+     inkscape:cx="433.59242"
+     inkscape:cy="19.659082"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -1468,12 +1468,12 @@
      id="layer1">
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 62.1763,21.166401 v -10.5832 L 72.7595,15.8748 Z"
+       d="M 62.09454,18.5206 V 7.9374 l 10.5832,5.291599 z"
        id="path6626"
        sodipodi:nodetypes="cccc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 62.1763,42.3328 V 31.7496 l 10.5832,5.2916 z"
+       d="M 62.1763,44.9786 V 34.3954 l 10.5832,5.2916 z"
        id="path6626-5"
        sodipodi:nodetypes="cccc" />
     <path
@@ -1498,12 +1498,14 @@
        sodipodi:nodetypes="cccc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 72.7595,37.0412 H 83.3427 V 29.1038 H 93.9259"
-       id="path2374" />
+       d="M 72.7595,39.687 H 83.3427 V 29.1038 h 10.5832"
+       id="path2374"
+       sodipodi:nodetypes="cccc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 72.7595,15.8748 h 10.5832 v 7.9374 h 10.5832"
-       id="path2376" />
+       d="m 72.7595,13.229 h 10.5832 l 0,10.5832 h 10.5832"
+       id="path2376"
+       sodipodi:nodetypes="cccc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 99.2175,23.8122 h 11.9061"
@@ -1516,11 +1518,11 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 62.1763,18.5206 H 56.8847"
+       d="m 62.09454,15.874799 h -5.2916"
        id="path2382" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 62.1763,13.229 H 56.8847"
+       d="m 62.09454,10.583199 h -5.2916"
        id="path2384" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1691,50 +1693,55 @@
        sodipodi:nodetypes="cccccc" />
     <path
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 56.8847,18.5206 -0.79374,0.79374 H 54.2389 v -1.58748 h 1.85206 z"
+       d="m 56.80294,15.874799 -0.79374,0.79374 h -1.85206 v -1.58748 h 1.85206 z"
        id="path2676-28"
        sodipodi:nodetypes="cccccc" />
     <path
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 56.8847,13.229 -0.79374,0.79374 H 54.2389 v -1.58748 h 1.85206 z"
+       d="m 56.80294,10.583199 -0.79374,0.79374 h -1.85206 v -1.58748 h 1.85206 z"
        id="path2676-97"
        sodipodi:nodetypes="cccccc" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23328px;line-height:125%;font-family:Cambria;-inkscape-font-specification:Cambria;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458"
-       x="67.467896"
-       y="26.457996"
+       x="67.386139"
+       y="23.812195"
        id="text5746-1-66-4-1-2-2-2-3"><tspan
          sodipodi:role="line"
-         x="67.467896"
-         y="26.457996"
+         x="67.386139"
+         y="23.812195"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23328px;font-family:Cambria;-inkscape-font-specification:Cambria;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458"
-         id="tspan1494-0-6">preamplifier</tspan></text>
+         id="tspan1494-0-6">transimpedance</tspan><tspan
+         sodipodi:role="line"
+         x="67.386139"
+         y="29.103794"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23328px;font-family:Cambria;-inkscape-font-specification:Cambria;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458"
+         id="tspan1724">preamplifier</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23328px;line-height:125%;font-family:Cambria;-inkscape-font-specification:Cambria;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458"
        x="67.467903"
-       y="47.624401"
+       y="50.270203"
        id="text5746-1-66-4-1-2-2-2-1"><tspan
          sodipodi:role="line"
          x="67.467903"
-         y="47.624401"
+         y="50.270203"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23328px;font-family:Cambria;-inkscape-font-specification:Cambria;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458"
          id="tspan1494-0-2">dummy</tspan><tspan
          sodipodi:role="line"
          x="67.467903"
-         y="52.916"
+         y="55.561802"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23328px;font-family:Cambria;-inkscape-font-specification:Cambria;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458"
          id="tspan2770">preamplifier</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23328px;line-height:125%;font-family:Cambria;-inkscape-font-specification:Cambria;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458"
-       x="48.9473"
-       y="10.583203"
+       x="48.86554"
+       y="7.9374022"
        id="text5746-1-66-4-1-2-2-9"><tspan
          sodipodi:role="line"
-         x="48.9473"
-         y="10.583203"
+         x="48.86554"
+         y="7.9374022"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23328px;font-family:Cambria;-inkscape-font-specification:Cambria;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458"
          id="tspan1494-3">input</tspan></text>
     <path
@@ -1772,12 +1779,12 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23328px;line-height:125%;font-family:Cambria;-inkscape-font-specification:Cambria;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458"
-       x="48.9473"
-       y="21.166403"
+       x="48.86554"
+       y="18.520601"
        id="text5746-1-66-4-1-2-2-9-9"><tspan
          sodipodi:role="line"
-         x="48.9473"
-         y="21.166403"
+         x="48.86554"
+         y="18.520601"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23328px;font-family:Cambria;-inkscape-font-specification:Cambria;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.26458"
          id="tspan1494-3-4">V<tspan
    style="font-size:65%;baseline-shift:sub"

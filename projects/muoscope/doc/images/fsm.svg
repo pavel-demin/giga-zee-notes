@@ -8,11 +8,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="1000"
-   height="600"
-   viewBox="0 0 264.58 158.748"
+   height="520"
+   viewBox="0 0 264.58 137.5816"
    version="1.1"
    id="svg1801"
-   sodipodi:docname="fsm.svg"
+   sodipodi:docname="fsm_h.svg"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
   <defs
      id="defs1795">
@@ -192,9 +192,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.75000002"
-     inkscape:cx="277.28065"
-     inkscape:cy="125.10892"
+     inkscape:zoom="1.0606602"
+     inkscape:cx="719.66704"
+     inkscape:cy="382.61076"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -235,7 +235,7 @@
      id="layer1">
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-6-7-9-0-2-7-3-0-3)"
-       d="m 150.8106,52.916 c 7.93739,-10e-7 7.9374,5.2916 0,5.2916"
+       d="m 129.64417,21.166397 c 0,-7.93739 5.2916,-7.9374 5.2916,0"
        id="path4399-7-7-1-1-3-3-3-4-1-3-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -244,147 +244,147 @@
        id="rect4116-4-2-6-4-0"
        width="42.332783"
        height="15.874799"
-       x="111.12361"
-       y="76.728203"
+       x="111.12358"
+       y="55.561798"
        ry="3.8343421e-07" />
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.26458;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect4116-4-2-6-4-5-9"
        width="105.832"
        height="10.5832"
-       x="79.374016"
-       y="103.1862"
+       x="79.373985"
+       y="82.019798"
        ry="3.8343421e-07" />
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.26458;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect4116-4-2-6-4-5"
        width="63.499199"
        height="10.5832"
-       x="100.54041"
-       y="124.35262"
+       x="100.54038"
+       y="103.18622"
        ry="3.8343421e-07" />
     <text
        text-anchor="middle"
-       x="132.29002"
-       y="80.696907"
+       x="132.28999"
+       y="59.530502"
        font-family="Cambria"
        font-size="4.93883px"
        id="text67"
        style="font-size:4.23328px;stroke-width:0.352773"><tspan
          sodipodi:role="line"
          id="tspan7475"
-         x="132.29002"
-         y="80.696907"
+         x="132.28999"
+         y="59.530502"
          style="font-size:4.23328px">time = time + 1</tspan><tspan
          sodipodi:role="line"
          id="tspan7477"
-         x="132.29002"
-         y="85.98851"
+         x="132.28999"
+         y="64.822105"
          style="font-size:4.23328px">data = data | input</tspan><tspan
          sodipodi:role="line"
-         x="132.29002"
-         y="91.280106"
+         x="132.28999"
+         y="70.113701"
          id="tspan7479"
          style="font-size:4.23328px">cntr = cntr + 1</tspan></text>
     <text
        text-anchor="middle"
-       x="164.03963"
-       y="85.988503"
+       x="164.0396"
+       y="64.822098"
        font-family="Cambria"
        font-size="4.93883px"
        id="text89"
        style="font-size:4.23328px;text-align:start;text-anchor:start;stroke-width:0.352773">cntr &lt; window</text>
     <text
        text-anchor="middle"
-       x="132.29002"
-       y="107.1549"
+       x="132.28999"
+       y="85.988495"
        font-family="Cambria"
        font-size="4.93883px"
        id="text96"
        style="font-size:4.23328px;stroke-width:0.352773"><tspan
          sodipodi:role="line"
          id="tspan7299"
-         x="132.29002"
-         y="107.1549"
+         x="132.28999"
+         y="85.988495"
          style="font-size:4.23328px">time = time + 1</tspan><tspan
          sodipodi:role="line"
          id="tspan7301"
-         x="132.29002"
-         y="112.4465"
+         x="132.28999"
+         y="91.280098"
          style="font-size:4.23328px">or = {|data[63:48],|data[47:32],|data[31:16],|data[15:0]}</tspan></text>
     <text
        text-anchor="middle"
-       x="134.93582"
-       y="99.217499"
+       x="134.93579"
+       y="78.051094"
        font-family="Cambria"
        font-size="4.93883px"
        id="text107"
        style="font-size:4.23328px;text-align:start;text-anchor:start;stroke-width:0.352773">cntr &gt;= window</text>
     <text
        text-anchor="middle"
-       x="132.29002"
-       y="128.32132"
+       x="132.28999"
+       y="107.15491"
        font-family="Cambria"
        font-size="14px"
        id="text114"
        style="font-size:4.23328px;stroke-width:0.352773"><tspan
          sodipodi:role="line"
          id="tspan5510"
-         x="132.29002"
-         y="128.32132"
+         x="132.28999"
+         y="107.15491"
          style="font-size:4.23328px;stroke-width:0.352773">time = time + 1</tspan><tspan
          sodipodi:role="line"
          id="tspan5512"
-         x="132.29002"
-         y="133.61292"
+         x="132.28999"
+         y="112.44651"
          style="font-size:4.23328px;stroke-width:0.352773">sum = or[3] + or[2] + or[1] + or[0]</tspan></text>
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.26458;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect4116-4-2-6-4"
        width="42.332779"
        height="10.583199"
-       x="111.12363"
-       y="145.51901"
+       x="111.1236"
+       y="124.35261"
        ry="3.8343421e-07" />
     <text
        text-anchor="middle"
-       x="132.29002"
-       y="149.4877"
+       x="132.28999"
+       y="128.3213"
        font-family="Cambria"
        font-size="4.93883px"
        id="text130"
        style="font-size:4.23328px;stroke-width:0.352773"><tspan
          sodipodi:role="line"
          id="tspan2164"
-         x="132.29002"
-         y="149.4877"
+         x="132.28999"
+         y="128.3213"
          style="font-size:4.23328px">time = time + 1</tspan><tspan
          sodipodi:role="line"
          id="tspan2166"
-         x="132.29002"
-         y="154.7793"
+         x="132.28999"
+         y="133.6129"
          style="font-size:4.23328px">valid = (sum &gt;= nhits)</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-6-7-9-0-2)"
-       d="m 132.29002,137.5816 v 5.2916"
+       d="m 132.28999,116.4152 v 5.2916"
        id="path4399-7-7-1-1-3-3-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-6-7-9-0-2-7)"
-       d="m 132.29001,116.41521 v 5.2916"
+       d="m 132.28998,95.248807 v 5.291603"
        id="path4399-7-7-1-1-3-3-3-4"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-6-7-9-0-2-7-3)"
-       d="M 132.29001,95.248801 V 100.5404"
+       d="m 132.28998,74.082398 v 5.291599"
        id="path4399-7-7-1-1-3-3-3-4-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-6-7-9-0-2-7-3-0)"
-       d="m 156.1022,82.0198 c 7.93739,-10e-7 7.9374,5.2916 0,5.2916"
+       d="m 156.10217,60.853397 c 7.93739,-1e-6 7.9374,5.2916 0,5.2916"
        id="path4399-7-7-1-1-3-3-3-4-1-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -393,56 +393,56 @@
        id="rect4116-4-2-6-4-0-5"
        width="31.749599"
        height="21.166401"
-       x="116.41521"
-       y="44.9786"
+       x="116.41518"
+       y="23.812197"
        ry="3.8343421e-07" />
     <text
        text-anchor="middle"
-       x="132.29002"
-       y="48.9473"
+       x="132.28999"
+       y="27.780897"
        font-family="Cambria"
        font-size="4.93883px"
        id="text67-5"
        style="font-size:4.23328px;stroke-width:0.352773"><tspan
          sodipodi:role="line"
          id="tspan7475-4"
-         x="132.29002"
-         y="48.9473"
+         x="132.28999"
+         y="27.780897"
          style="font-size:4.23328px">time = time + 1</tspan><tspan
          sodipodi:role="line"
          id="tspan7477-7"
-         x="132.29002"
-         y="54.238899"
+         x="132.28999"
+         y="33.072498"
          style="font-size:4.23328px">data = input</tspan><tspan
          sodipodi:role="line"
-         x="132.29002"
-         y="59.530499"
+         x="132.28999"
+         y="38.364098"
          id="tspan7479-6"
          style="font-size:4.23328px">cntr = 0</tspan><tspan
          sodipodi:role="line"
-         x="132.29002"
-         y="64.822105"
+         x="132.28999"
+         y="43.655697"
          style="font-size:4.23328px"
          id="tspan7837">valid = 0</tspan></text>
     <text
        text-anchor="middle"
-       x="158.74803"
-       y="56.884701"
+       x="132.28996"
+       y="13.228997"
        font-family="Cambria"
        font-size="4.93883px"
        id="text89-5"
-       style="font-size:4.23328px;text-align:start;text-anchor:start;stroke-width:0.352773">input == 0</text>
+       style="font-size:4.23328px;text-align:center;text-anchor:middle;stroke-width:0.352773">input == 0</text>
     <text
        text-anchor="middle"
-       x="134.93582"
-       y="72.759506"
+       x="134.93579"
+       y="51.593102"
        font-family="Cambria"
        font-size="4.93883px"
        id="text107-6"
        style="font-size:4.23328px;text-align:start;text-anchor:start;stroke-width:0.352773">input != 0</text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-6-7-9-0-2-7-3-2)"
-       d="m 132.29,68.790801 v 5.2916"
+       d="m 132.28997,47.624398 v 5.2916"
        id="path4399-7-7-1-1-3-3-3-4-1-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -451,78 +451,78 @@
        id="rect4116-4-2-6-4-0-5-7"
        width="21.166393"
        height="31.749605"
-       x="121.7068"
-       y="2.6458001"
+       x="66.145004"
+       y="18.520588"
        ry="3.8343421e-07" />
     <text
        text-anchor="middle"
-       x="132.29002"
-       y="6.6145005"
+       x="76.728233"
+       y="22.48929"
        font-family="Cambria"
        font-size="4.93883px"
        id="text67-5-4"
        style="font-size:4.23328px;stroke-width:0.352773"><tspan
          sodipodi:role="line"
          id="tspan7477-7-3"
-         x="132.29002"
-         y="6.6145005"
+         x="76.728233"
+         y="22.48929"
          style="font-size:4.23328px">time = 0</tspan><tspan
          sodipodi:role="line"
-         x="132.29002"
-         y="11.9061"
+         x="76.728233"
+         y="27.780891"
          id="tspan7479-6-0"
          style="font-size:4.23328px">data = 0</tspan><tspan
          sodipodi:role="line"
-         x="132.29002"
-         y="17.197702"
+         x="76.728233"
+         y="33.072491"
          style="font-size:4.23328px"
          id="tspan7837-7">cntr = 0</tspan><tspan
          sodipodi:role="line"
-         x="132.29002"
-         y="22.489302"
+         x="76.728233"
+         y="38.36409"
          style="font-size:4.23328px"
          id="tspan7949">or = 0</tspan><tspan
          sodipodi:role="line"
-         x="132.29002"
-         y="27.780901"
+         x="76.728233"
+         y="43.655693"
          style="font-size:4.23328px"
          id="tspan7945">sum = 0</tspan><tspan
          sodipodi:role="line"
-         x="132.29002"
-         y="33.072498"
+         x="76.728233"
+         y="48.947292"
          style="font-size:4.23328px"
          id="tspan7947">valid = 0</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-6-7-9-0-2-7-3-2-8)"
-       d="m 132.29001,37.0412 v 5.291601"
+       d="M 89.957199,34.3954 H 113.7694"
        id="path4399-7-7-1-1-3-3-3-4-1-9-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <text
        text-anchor="middle"
-       x="134.93582"
-       y="41.009899"
+       x="101.8633"
+       y="31.749598"
        font-family="Cambria"
        font-size="4.93883px"
        id="text107-6-8"
-       style="font-size:4.23328px;text-align:start;text-anchor:start;stroke-width:0.352773">resetn != 0</text>
+       style="font-size:4.23328px;text-align:center;text-anchor:middle;stroke-width:0.352773">resetn != 0</text>
     <text
        text-anchor="middle"
-       x="153.45642"
-       y="19.8435"
+       x="76.72821"
+       y="7.9373975"
        font-family="Cambria"
        font-size="4.93883px"
        id="text89-5-1"
-       style="font-size:4.23328px;text-align:start;text-anchor:start;stroke-width:0.352773">resetn == 0</text>
+       style="font-size:4.23328px;text-align:center;text-anchor:middle;stroke-width:0.352773">resetn == 0</text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-6-7-9-0-2-7-3-0-6-9)"
-       d="m 108.47781,150.8106 c -50.270199,0 -44.978599,-95.248799 5.2916,-95.248799"
+       d="m 156.10217,129.6442 c 60.8534,0 55.5618,-95.248803 -5.2916,-95.248803"
        id="path4399-7-7-1-1-3-3-3-4-1-3-3-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.26458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend-6-7-9-0-2-7-3-0-5)"
-       d="m 145.519,15.8748 c 7.93739,-1e-6 7.9374,5.2916 0,5.2916"
+       d="m 74.082408,15.874798 c 0,-7.9373904 5.2916,-7.9374004 5.2916,0"
        id="path4399-7-7-1-1-3-3-3-4-1-3-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
