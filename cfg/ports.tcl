@@ -14,5 +14,5 @@ create_bd_port -dir O -from 1 -to 0 test_o
 
 ### DATA
 
-create_bd_port -dir I -from 63 -to 0 data_p_i
-create_bd_port -dir I -from 63 -to 0 data_n_i
+create_bd_port -dir I -from 65 -to 0 data_p_i
+create_bd_port -dir I -from 65 -to 0 data_n_i

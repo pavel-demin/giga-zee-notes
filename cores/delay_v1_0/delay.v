@@ -7,9 +7,9 @@ module delay
 
   input  wire [15:0] cfg,
 
-  input  wire [63:0] din,
+  input  wire [65:0] din,
 
-  output wire [63:0] dout
+  output wire [65:0] dout
 );
 
   genvar j;
@@ -31,5 +31,7 @@ module delay
       );
     end
   endgenerate
+
+  assign dout[65:64] = din[65:64];
 
 endmodule

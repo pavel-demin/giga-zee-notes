@@ -7,13 +7,13 @@ module test_detector_reader
   input  wire        aclk,
   input  wire        aresetn,
 
-  input  wire [63:0] din,
+  input  wire [65:0] din,
   input  wire [10:0] cfg,
 
   output wire [1:0]  test
 );
 
-  reg [63:0] int_data_reg, int_data_next;
+  reg [65:0] int_data_reg, int_data_next;
   reg [7:0] int_cntr_reg, int_cntr_next;
   reg int_case_reg, int_case_next;
 
@@ -21,7 +21,7 @@ module test_detector_reader
   begin
     if(~aresetn)
     begin
-      int_data_reg <= 64'd0;
+      int_data_reg <= 66'd0;
       int_cntr_reg <= 8'd0;
       int_case_reg <= 1'b0;
     end
@@ -61,6 +61,6 @@ module test_detector_reader
     endcase
   end
 
-  assign test = {|int_data_reg[63:48], |int_data_reg[47:32]};
+  assign test = {int_data_reg[65], |int_data_reg[15:0]};
 
 endmodule

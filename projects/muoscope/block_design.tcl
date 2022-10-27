@@ -110,7 +110,7 @@ cell pavel-demin:user:port_slicer slice_5 {
 
 # Create util_ds_buf
 cell xilinx.com:ip:util_ds_buf buf_0 {
-  C_SIZE 64
+  C_SIZE 66
   C_BUF_TYPE IBUFDS
 } {
   IBUF_DS_P data_p_i

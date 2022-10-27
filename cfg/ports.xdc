@@ -235,3 +235,9 @@ set_property PACKAGE_PIN AB5 [get_ports {data_p_i[62]}]
 
 set_property PACKAGE_PIN V4 [get_ports {data_n_i[63]}]
 set_property PACKAGE_PIN V5 [get_ports {data_p_i[63]}]
+
+set_property PACKAGE_PIN J22 [get_ports {data_n_i[64]}]
+set_property PACKAGE_PIN J21 [get_ports {data_p_i[64]}]
+
+set_property PACKAGE_PIN C22 [get_ports {data_n_i[65]}]
+set_property PACKAGE_PIN D22 [get_ports {data_p_i[65]}]
