@@ -101,7 +101,14 @@ cell pavel-demin:user:port_slicer slice_4 {
 
 # Create xlslice
 cell pavel-demin:user:port_slicer slice_5 {
-  DIN_WIDTH 64 DIN_FROM 42 DIN_TO 32
+  DIN_WIDTH 64 DIN_FROM 39 DIN_TO 32
+} {
+  Din cfg_0/cfg_data
+}
+
+# Create xlslice
+cell pavel-demin:user:port_slicer slice_6 {
+  DIN_WIDTH 64 DIN_FROM 42 DIN_TO 40
 } {
   Din cfg_0/cfg_data
 }
@@ -130,21 +137,28 @@ cell pavel-demin:user:delay delay_0 {} {
   aclk ps_0/FCLK_CLK0
 }
 
-# Create axis_detector_reader
-cell pavel-demin:user:axis_detector_reader det_0 {} {
+# Create axis_trigger
+cell pavel-demin:user:axis_trigger trg_0 {} {
   din delay_0/dout
-  cfg slice_5/Dout
+  test test_o
   aclk ps_0/FCLK_CLK0
   aresetn slice_1/Dout
 }
 
-# Create axis_detector_reader
-cell pavel-demin:user:test_detector_reader det_1 {} {
-  din delay_0/dout
+# Create axis_window
+cell pavel-demin:user:axis_window win_0 {} {
   cfg slice_5/Dout
-  test test_o
+  S_AXIS trg_0/M_AXIS
   aclk ps_0/FCLK_CLK0
-  aresetn slice_2/Dout
+  aresetn slice_1/Dout
+}
+
+# Create axis_selection
+cell pavel-demin:user:axis_selection sel_0 {} {
+  cfg slice_6/Dout
+  S_AXIS win_0/M_AXIS
+  aclk ps_0/FCLK_CLK0
+  aresetn slice_1/Dout
 }
 
 # Create axis_subset_converter
@@ -155,7 +169,7 @@ cell xilinx.com:ip:axis_subset_converter subset_0 {
   M_TDATA_NUM_BYTES 16
   TDATA_REMAP {tdata[31:0],tdata[63:32],tdata[95:64],tdata[127:96]}
 } {
-  S_AXIS det_0/M_AXIS
+  S_AXIS sel_0/M_AXIS
   aclk ps_0/FCLK_CLK0
   aresetn slice_1/Dout
 }
