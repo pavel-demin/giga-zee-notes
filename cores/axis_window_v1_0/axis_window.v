@@ -52,7 +52,7 @@ module axis_window
     int_enbl_next = int_enbl_reg;
     int_tvalid_next = int_tvalid_reg;
 
-    if(int_enbl_reg)
+    if(s_axis_tvalid | int_enbl_reg)
     begin
       int_cntr_next = int_cntr_reg + 1'b1;
     end
