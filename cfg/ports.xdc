@@ -3,15 +3,15 @@ set_property CFGBVS VCCO [current_design]
 
 ### System controller support logic
 
-set_property IOSTANDARD LVCMOS18 [get_ports PL_pin_K16]
-set_property IOSTANDARD LVCMOS18 [get_ports PL_pin_K19]
-set_property IOSTANDARD LVCMOS18 [get_ports PL_pin_K20]
-set_property IOSTANDARD LVCMOS18 [get_ports PL_pin_L16]
-set_property IOSTANDARD LVCMOS18 [get_ports PL_pin_M15]
-set_property IOSTANDARD LVCMOS18 [get_ports PL_pin_N15]
-set_property IOSTANDARD LVCMOS18 [get_ports PL_pin_N22]
-set_property IOSTANDARD LVCMOS18 [get_ports PL_pin_P16]
-set_property IOSTANDARD LVCMOS18 [get_ports PL_pin_P22]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_pin_K16]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_pin_K19]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_pin_K20]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_pin_L16]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_pin_M15]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_pin_N15]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_pin_N22]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_pin_P16]
+set_property IOSTANDARD LVCMOS25 [get_ports PL_pin_P22]
 
 set_property PACKAGE_PIN K16 [get_ports PL_pin_K16]
 set_property PACKAGE_PIN K19 [get_ports PL_pin_K19]
@@ -25,7 +25,7 @@ set_property PACKAGE_PIN P22 [get_ports PL_pin_P22]
 
 ### LED
 
-set_property IOSTANDARD LVCMOS18 [get_ports {led_o[*]}]
+set_property IOSTANDARD LVCMOS25 [get_ports {led_o[*]}]
 set_property SLEW SLOW [get_ports {led_o[*]}]
 set_property DRIVE 4 [get_ports {led_o[*]}]
 
@@ -34,15 +34,18 @@ set_property PACKAGE_PIN U7 [get_ports {led_o[1]}]
 
 ### TEST
 
-set_property IOSTANDARD LVCMOS18 [get_ports {test_o[*]}]
+set_property IOSTANDARD LVCMOS25 [get_ports {test_o[*]}]
 
 set_property PACKAGE_PIN AB1 [get_ports {test_o[0]}]
 set_property PACKAGE_PIN AB2 [get_ports {test_o[1]}]
 
 ### DATA
 
-set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports {data_p_i[*]}]
-set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports {data_n_i[*]}]
+set_property IOSTANDARD LVDS_25 [get_ports {data_n_i[*]}]
+set_property IOSTANDARD LVDS_25 [get_ports {data_p_i[*]}]
+
+set_property DIFF_TERM TRUE [get_ports {data_n_i[*]}]
+set_property DIFF_TERM TRUE [get_ports {data_p_i[*]}]
 
 set_property PACKAGE_PIN E16 [get_ports {data_n_i[0]}]
 set_property PACKAGE_PIN F16 [get_ports {data_p_i[0]}]
