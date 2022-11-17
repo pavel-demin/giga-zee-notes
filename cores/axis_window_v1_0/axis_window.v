@@ -23,6 +23,10 @@ module axis_window
   reg int_enbl_reg, int_enbl_next;
   reg int_tvalid_reg, int_tvalid_next;
 
+  wire int_comp_wire;
+
+  assign int_comp_wire = int_cntr_reg >= cfg;
+
   always @(posedge aclk)
   begin
     if(~aresetn)
@@ -57,16 +61,16 @@ module axis_window
     begin
       int_tdata_next[65:0] = int_tdata_next[65:0] | s_axis_tdata[65:0];
 
-      if(!int_cntr_reg)
+      if(~|int_cntr_reg)
       begin
         int_tdata_next = s_axis_tdata;
         int_enbl_next = 1'b1;
       end
     end
 
-    int_tvalid_next = int_cntr_reg >= cfg;
+    int_tvalid_next = |cfg ? int_comp_wire : s_axis_tvalid;
 
-    if(int_tvalid_next)
+    if(int_comp_wire)
     begin
       int_cntr_next = 8'd0;
       int_enbl_next = 1'b0;
