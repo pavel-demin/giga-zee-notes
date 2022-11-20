@@ -9,7 +9,6 @@ import matplotlib
 matplotlib.use("Qt5Agg")
 
 import matplotlib.pyplot as plt
-import mpl_toolkits.mplot3d as m3d
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 from PyQt5.QtWidgets import QLabel, QSpinBox
@@ -81,7 +80,8 @@ f.seek(0, os.SEEK_END)
 size = f.tell()
 
 fig = plt.figure(figsize=[8, 6], constrained_layout=True)
-ax = m3d.Axes3D(fig)
+
+ax = fig.add_subplot(projection="3d")
 
 toolbar = fig.canvas.toolbar
 toolbar.addSeparator()
