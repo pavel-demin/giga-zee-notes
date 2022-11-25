@@ -87,28 +87,7 @@ cell pavel-demin:user:port_slicer slice_2 {
 
 # Create xlslice
 cell pavel-demin:user:port_slicer slice_3 {
-  DIN_WIDTH 64 DIN_FROM 2 DIN_TO 2
-} {
-  Din cfg_0/cfg_data
-}
-
-# Create xlslice
-cell pavel-demin:user:port_slicer slice_4 {
-  DIN_WIDTH 64 DIN_FROM 31 DIN_TO 16
-} {
-  Din cfg_0/cfg_data
-}
-
-# Create xlslice
-cell pavel-demin:user:port_slicer slice_5 {
-  DIN_WIDTH 64 DIN_FROM 39 DIN_TO 32
-} {
-  Din cfg_0/cfg_data
-}
-
-# Create xlslice
-cell pavel-demin:user:port_slicer slice_6 {
-  DIN_WIDTH 64 DIN_FROM 42 DIN_TO 40
+  DIN_WIDTH 64 DIN_FROM 23 DIN_TO 16
 } {
   Din cfg_0/cfg_data
 }
@@ -130,16 +109,67 @@ cell pavel-demin:user:edge_detector edge_0 {} {
   aclk ps_0/FCLK_CLK0
 }
 
-# Create edge_detector
-cell pavel-demin:user:delay delay_0 {} {
+for {set i 0} {$i <= 3} {incr i} {
+  cell pavel-demin:user:port_slicer slice_[expr $i + 4] {
+    DIN_WIDTH 64 DIN_FROM [expr 8 * $i + 39] DIN_TO [expr 8 * $i + 32]
+  } {
+    Din cfg_0/cfg_data
+  }
+
+  cell pavel-demin:user:port_slicer data_slice_$i {
+    DIN_WIDTH 66 DIN_FROM [expr 16 * $i + 15] DIN_TO [expr 16 * $i]
+  } {
+    din edge_0/dout
+  }
+
+  cell xilinx.com:ip:c_shift_ram delay_$i {
+    WIDTH.VALUE_SRC USER
+    SHIFTREGTYPE Variable_Length_Lossless
+    WIDTH 16
+    DEPTH 256
+  } {
+    A slice_[expr $i + 4]/dout
+    D data_slice_$i/dout
+    CLK ps_0/FCLK_CLK0
+  }
+}
+
+# Create xlslice
+cell pavel-demin:user:port_slicer data_slice_4 {
+  DIN_WIDTH 66 DIN_FROM 65 DIN_TO 64
+} {
   din edge_0/dout
-  cfg slice_4/Dout
-  aclk ps_0/FCLK_CLK0
+}
+
+# Create c_shift_ram
+cell xilinx.com:ip:c_shift_ram delay_4 {
+  WIDTH.VALUE_SRC USER
+  WIDTH 2
+  DEPTH 1
+} {
+  D data_slice_4/dout
+  CLK ps_0/FCLK_CLK0
+}
+
+# Create xlconcat
+cell xilinx.com:ip:xlconcat concat_0 {
+  NUM_PORTS 5
+  IN0_WIDTH 16
+  IN1_WIDTH 16
+  IN2_WIDTH 16
+  IN3_WIDTH 16
+  IN4_WIDTH 2
+} {
+  In0 delay_0/Q
+  In1 delay_1/Q
+  In2 delay_2/Q
+  In3 delay_3/Q
+  In4 delay_4/Q
 }
 
 # Create axis_trigger
 cell pavel-demin:user:axis_trigger trg_0 {} {
-  din delay_0/dout
+  din concat_0/dout
   test test_o
   aclk ps_0/FCLK_CLK0
   aresetn slice_1/Dout
@@ -147,16 +177,8 @@ cell pavel-demin:user:axis_trigger trg_0 {} {
 
 # Create axis_window
 cell pavel-demin:user:axis_window win_0 {} {
-  cfg slice_5/Dout
+  cfg slice_3/Dout
   S_AXIS trg_0/M_AXIS
-  aclk ps_0/FCLK_CLK0
-  aresetn slice_1/Dout
-}
-
-# Create axis_selection
-cell pavel-demin:user:axis_selection sel_0 {} {
-  cfg slice_6/Dout
-  S_AXIS win_0/M_AXIS
   aclk ps_0/FCLK_CLK0
   aresetn slice_1/Dout
 }
@@ -169,7 +191,7 @@ cell xilinx.com:ip:axis_subset_converter subset_0 {
   M_TDATA_NUM_BYTES 16
   TDATA_REMAP {tdata[31:0],tdata[63:32],tdata[95:64],tdata[127:96]}
 } {
-  S_AXIS sel_0/M_AXIS
+  S_AXIS win_0/M_AXIS
   aclk ps_0/FCLK_CLK0
   aresetn slice_1/Dout
 }
@@ -178,14 +200,14 @@ cell xilinx.com:ip:axis_subset_converter subset_0 {
 cell xilinx.com:ip:fifo_generator fifo_generator_0 {
   PERFORMANCE_OPTIONS First_Word_Fall_Through
   INPUT_DATA_WIDTH 128
-  INPUT_DEPTH 512
+  INPUT_DEPTH 8192
   OUTPUT_DATA_WIDTH 32
-  OUTPUT_DEPTH 2048
+  OUTPUT_DEPTH 32768
   READ_DATA_COUNT true
-  READ_DATA_COUNT_WIDTH 12
+  READ_DATA_COUNT_WIDTH 16
 } {
   clk ps_0/FCLK_CLK0
-  srst slice_3/Dout
+  srst slice_2/Dout
 }
 
 # Create axis_fifo

@@ -158,8 +158,7 @@ int main(int argc, char *argv[])
   int yes = 1;
 
   volatile void *cfg;
-  volatile uint8_t *rst, *wnd, *cut;
-  volatile uint16_t *dly;
+  volatile uint8_t *wnd, *dly;
 
   if((fd_mem = open("/dev/mem", O_RDWR)) < 0)
   {
@@ -169,18 +168,14 @@ int main(int argc, char *argv[])
 
   cfg = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ|PROT_WRITE, MAP_SHARED, fd_mem, 0x40001000);
 
-  rst = ((uint8_t *)(cfg + 0));
-  dly = ((uint16_t *)(cfg + 2));
-  wnd = ((uint8_t *)(cfg + 4));
-  cut = ((uint8_t *)(cfg + 5));
+  wnd = ((uint8_t *)(cfg + 2));
+  dly = ((uint8_t *)(cfg + 4));
 
-  /* reset test module */
-  *rst &= ~2;
-  *rst |= 2;
-
-  *dly = 0;
-  *wnd = 3;
-  *cut = 2;
+  *wnd = 9;
+  dly[0] = 0;
+  dly[1] = 0;
+  dly[2] = 0;
+  dly[3] = 0;
 
   if((fd_i2c = open("/dev/i2c-0", O_RDWR)) < 0)
   {
@@ -243,13 +238,11 @@ int main(int argc, char *argv[])
           write(fd_i2c, &buffer, 1);
           break;
         case 4:
-          *dly = data;
-          break;
-        case 5:
           *wnd = data;
           break;
-        case 6:
-          *cut = data;
+        case 5:
+          if(chan > 3) break;
+          dly[chan] = data;
           break;
       }
     }

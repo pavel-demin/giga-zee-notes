@@ -53,8 +53,8 @@ int main(int argc, char *argv[])
   rst = ((uint8_t *)(cfg + 0));
 
   /* reset fifo */
-  *rst |= 4;
-  *rst &= ~4;
+  *rst |= 2;
+  *rst &= ~2;
 
   /* reset detector reader */
   *rst &= ~1;
@@ -64,13 +64,20 @@ int main(int argc, char *argv[])
 
   while(!interrupted)
   {
+    if(*cntr > 32760)
+    {
+      fprintf(stderr, "FIFO buffer is full\n");
+    }
+
     if(*cntr < 4)
     {
       usleep(1000);
       continue;
     }
+
     data[0] = *fifo;
     data[1] = *fifo;
+
     if(fwrite(data, 1, 16, file_out) < 0) break;
   }
 

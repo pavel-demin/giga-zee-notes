@@ -46,22 +46,16 @@ module axis_window
 
     if(|int_cntr_reg)
     begin
-      int_tdata_next[65:0] = int_tdata_next[65:0] | s_axis_tdata[65:0];
-      int_cntr_next = int_cntr_reg + 1'b1;
+      int_cntr_next = int_cntr_reg - 1'b1;
     end
 
     if(s_axis_tvalid & ~|int_cntr_reg)
     begin
-      int_tdata_next = s_axis_tdata;
-      int_cntr_next = 8'd1;
+      int_cntr_next = cfg;
     end
 
-    int_tvalid_next = |cfg ? int_cntr_reg >= cfg : s_axis_tvalid;
-
-    if(int_cntr_reg >= cfg)
-    begin
-      int_cntr_next = 8'd0;
-    end
+    int_tdata_next = s_axis_tdata;
+    int_tvalid_next = |int_cntr_reg | s_axis_tvalid;
   end
 
   assign m_axis_tdata = int_tdata_reg;

@@ -80,14 +80,13 @@ class MuoScope(QMainWindow, Ui_MuoScope):
       label.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
       self.dlyLayout.addWidget(label, 0, i)
       self.dlyValue[i] = QSpinBox()
-      self.dlyValue[i].setMaximum(15)
+      self.dlyValue[i].setMaximum(255)
       self.dlyValue[i].valueChanged.connect(partial(self.set_dly, i))
       self.dlyLayout.addWidget(self.dlyValue[i], 1, i)
     self.voltageValue.valueChanged.connect(partial(self.set_hv, 0))
     self.currentValue.valueChanged.connect(partial(self.set_hv, 1))
     self.stateValue.stateChanged.connect(self.set_state)
     self.wndValue.valueChanged.connect(self.set_wnd)
-    self.cutValue.valueChanged.connect(self.set_cut)
     # read settings
     settings = QSettings('muoscope.ini', QSettings.IniFormat)
     self.read_cfg_settings(settings)
@@ -133,12 +132,12 @@ class MuoScope(QMainWindow, Ui_MuoScope):
       self.set_disc(i, item.value())
     for i, item in self.monoValue.items():
       self.set_mono(i, item.value())
+    for i, item in self.dlyValue.items():
+      self.set_dly(i, item.value())
     self.set_hv(0, self.voltageValue.value())
     self.set_hv(1, self.currentValue.value())
     self.set_state(self.stateValue.isChecked())
-    self.set_dly(0)
     self.set_wnd(self.wndValue.value())
-    self.set_cut(self.cutValue.value())
     self.adcTimer.start(200)
 
   def timeout(self):
@@ -194,18 +193,13 @@ class MuoScope(QMainWindow, Ui_MuoScope):
     if self.idle: return
     self.socket.write(struct.pack('<I', 3<<24 | int(self.stateValue.isChecked())))
 
-  def set_dly(self, value):
-    if self.idle: return
-    value = self.dlyValue[3].value() << 12 | self.dlyValue[2].value() << 8 | self.dlyValue[1].value() << 4 | self.dlyValue[0].value()
-    self.socket.write(struct.pack('<I', 4<<24 | int(value)))
-
   def set_wnd(self, value):
     if self.idle: return
-    self.socket.write(struct.pack('<I', 5<<24 | int(value)))
+    self.socket.write(struct.pack('<I', 4<<24 | int(value)))
 
-  def set_cut(self, value):
+  def set_dly(self, channel, value):
     if self.idle: return
-    self.socket.write(struct.pack('<I', 6<<24 | int(value)))
+    self.socket.write(struct.pack('<I', 5<<24 | int(channel)<<16 | int(value)))
 
   def write_cfg(self):
     dialog = QFileDialog(self, 'Write configuration settings', '.', '*.ini')
@@ -238,20 +232,18 @@ class MuoScope(QMainWindow, Ui_MuoScope):
       settings.setValue('dly_%d' % i, item.value())
     settings.setValue('voltage', self.voltageValue.value())
     settings.setValue('current', self.currentValue.value())
-    settings.setValue('cut', self.cutValue.value())
     settings.setValue('wnd', self.wndValue.value())
 
   def read_cfg_settings(self, settings):
     self.addrValue.setText(settings.value('addr', '192.168.42.1'))
     for i, item in self.discValue.items():
-      item.setValue(settings.value('disc_%d' % i, 100, type = int))
+      item.setValue(settings.value('disc_%d' % i, 50, type = int))
     for i, item in self.monoValue.items():
-      item.setValue(settings.value('mono_%d' % i, 100, type = int))
+      item.setValue(settings.value('mono_%d' % i, 500, type = int))
     for i, item in self.dlyValue.items():
       item.setValue(settings.value('dly_%d' % i, 0, type = int))
     self.voltageValue.setValue(settings.value('voltage', 0, type = int))
     self.currentValue.setValue(settings.value('current', 4095, type = int))
-    self.cutValue.setValue(settings.value('cut', 1, type = int))
     self.wndValue.setValue(settings.value('wnd', 3, type = int))
 
 app = QApplication(sys.argv)
