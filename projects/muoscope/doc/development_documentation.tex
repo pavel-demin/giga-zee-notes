@@ -281,11 +281,15 @@ The FGPA configuration contains the following addressable status and configurati
   \hline
   0x40001000 + 0 & 3 reset bits (0: main coincidence reset, 1: test coincidence reset, 2: FIFO reset) \\
   \hline
-  0x40001000 + 2 & delay configuration bits (0-3: RPC A, 4-7: RPC B, 8-11: RPC C, 12-15: RPC D) \\
+  0x40001000 + 2 & coincidence window (8-bit integer value) \\
   \hline
-  0x40001000 + 4 & coincidence window (8-bit integer value) \\
+  0x40001000 + 4 & delay for RPC A (8-bit integer value) \\
   \hline
-  0x40001000 + 5 & number of hit detectors (3-bit integer value) \\
+  0x40001000 + 5 & delay for RPC B (8-bit integer value) \\
+  \hline
+  0x40001000 + 6 & delay for RPC C (8-bit integer value) \\
+  \hline
+  0x40001000 + 7 & delay for RPC D (8-bit integer value) \\
   \hline
   \end{tabular}
 \end{center}
@@ -298,13 +302,13 @@ Reset bits are used to start and stop coincidence blocks and to empty the FIFO b
 
 Other configuration registers are used to configure the parameters of the delay and coincidence blocks.
 
-The diagram of the coincidence finding algorithm is shown in figure \ref{fig:fsm}.
+The diagram of the coincidence finding algorithm is shown in figure \ref{fig:algorithm}.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=\textwidth]{images/fsm.pdf}
+  \includegraphics[width=\textwidth]{images/algorithm.pdf}
   \caption{diagram of the coincidence finding algorithm}
-  \label{fig:fsm}
+  \label{fig:algorithm}
 \end{figure}
 
 The FPGA clock frequency is set to 200 MHz and the time measurement accuracy is 5 ns.
@@ -384,11 +388,9 @@ When a command is received, the 8-bit code is used to identify the operation to 
   \hline
   3 & if value > 0 enable otherwise disable high-voltage power supply \\
   \hline
-  4 & set delays \\
+  4 & set coincidence window \\
   \hline
-  5 & set coincidence window \\
-  \hline
-  6 & set number of hit detectors \\
+  5 & set delays \\
   \hline
   \end{tabular}
 \end{center}
@@ -450,12 +452,11 @@ The \texttt{setup} and \texttt{dump} programs provide the command line interface
 The \texttt{setup} program is used to set all the parameters of the high-voltage power supply and the CMS RPC frontend integrated circuits. When the \texttt{setup} program is run with no arguments, it prints the usage instructions:
 \vspace{-1ex}
 \begin{verbatim}
-Usage: setup t0 t1 t2 t3 t4 t5 t6 t7 m0 m1 m2 m3 m4 m5 m6 m7 d0 d1 d2 d3 w n v c
+Usage: setup t0 t1 t2 t3 t4 t5 t6 t7 m0 m1 m2 m3 m4 m5 m6 m7 d0 d1 d2 d3 w v c
  t0-t7 - threshold
  m0-m7 - monostable
  d0-d3 - delay
  w - window
- n - number of hit detectors
  v - voltage
  c - current
 \end{verbatim}
