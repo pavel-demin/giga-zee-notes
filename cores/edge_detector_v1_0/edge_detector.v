@@ -7,10 +7,10 @@ module edge_detector
 
   input  wire [65:0] din,
 
-  output wire [65:0] dout
+  output wire [64:0] dout
 );
 
-  reg [65:0] int_data_reg[2:0];
+  reg [64:0] int_data_reg[2:0];
 
   wire [65:0] int_data_wire;
 
@@ -29,7 +29,7 @@ module edge_detector
 
   always @(posedge aclk)
   begin
-    int_data_reg[0] <= ~int_data_wire;
+    int_data_reg[0] <= ~{&int_data_wire[65:64], int_data_wire[63:0]};
     int_data_reg[1] <= int_data_reg[0];
     int_data_reg[2] <= int_data_reg[1] & ~int_data_reg[0];
   end

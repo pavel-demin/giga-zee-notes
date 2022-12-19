@@ -117,7 +117,7 @@ for {set i 0} {$i <= 3} {incr i} {
   }
 
   cell pavel-demin:user:port_slicer data_slice_$i {
-    DIN_WIDTH 66 DIN_FROM [expr 16 * $i + 15] DIN_TO [expr 16 * $i]
+    DIN_WIDTH 65 DIN_FROM [expr 16 * $i + 15] DIN_TO [expr 16 * $i]
   } {
     din edge_0/dout
   }
@@ -136,7 +136,7 @@ for {set i 0} {$i <= 3} {incr i} {
 
 # Create xlslice
 cell pavel-demin:user:port_slicer data_slice_4 {
-  DIN_WIDTH 66 DIN_FROM 65 DIN_TO 64
+  DIN_WIDTH 65 DIN_FROM 64 DIN_TO 64
 } {
   din edge_0/dout
 }
@@ -144,7 +144,7 @@ cell pavel-demin:user:port_slicer data_slice_4 {
 # Create c_shift_ram
 cell xilinx.com:ip:c_shift_ram delay_4 {
   WIDTH.VALUE_SRC USER
-  WIDTH 2
+  WIDTH 1
   DEPTH 1
 } {
   D data_slice_4/dout
@@ -158,7 +158,7 @@ cell xilinx.com:ip:xlconcat concat_0 {
   IN1_WIDTH 16
   IN2_WIDTH 16
   IN3_WIDTH 16
-  IN4_WIDTH 2
+  IN4_WIDTH 1
 } {
   In0 delay_0/Q
   In1 delay_1/Q
