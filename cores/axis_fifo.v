@@ -4,41 +4,110 @@
 module axis_fifo #
 (
   parameter integer S_AXIS_TDATA_WIDTH = 32,
-  parameter integer M_AXIS_TDATA_WIDTH = 32
+  parameter integer M_AXIS_TDATA_WIDTH = 32,
+  parameter integer WRITE_DEPTH = 512,
+  parameter         ALWAYS_READY = "FALSE",
+  parameter         ALWAYS_VALID = "FALSE"
 )
 (
   // System signals
   input  wire                          aclk,
+  input  wire                          aresetn,
+
+  // FIFO status
+  output wire [15:0]                   write_count,
+  output wire [15:0]                   read_count,
 
   // Slave side
-  output wire                          s_axis_tready,
   input  wire [S_AXIS_TDATA_WIDTH-1:0] s_axis_tdata,
   input  wire                          s_axis_tvalid,
+  output wire                          s_axis_tready,
 
   // Master side
-  input  wire                          m_axis_tready,
   output wire [M_AXIS_TDATA_WIDTH-1:0] m_axis_tdata,
   output wire                          m_axis_tvalid,
-
-  // FIFO_WRITE port
-  input  wire                          fifo_write_full,
-  output wire [S_AXIS_TDATA_WIDTH-1:0] fifo_write_data,
-  output wire                          fifo_write_wren,
-
-  // FIFO_READ port
-  input  wire                          fifo_read_empty,
-  input  wire [M_AXIS_TDATA_WIDTH-1:0] fifo_read_data,
-  output wire                          fifo_read_rden
+  input  wire                          m_axis_tready
 );
 
-  assign m_axis_tdata = fifo_read_empty ? {(M_AXIS_TDATA_WIDTH){1'b0}} : fifo_read_data;
-  assign m_axis_tvalid = 1'b1;
+  function integer clogb2 (input integer value);
+    for(clogb2 = 0; value > 0; clogb2 = clogb2 + 1) value = value >> 1;
+  endfunction
 
-  assign s_axis_tready = 1'b1;
+  localparam integer WRITE_COUNT_WIDTH = clogb2(WRITE_DEPTH - 1) + 1;
+  localparam integer READ_COUNT_WIDTH = clogb2(WRITE_DEPTH * S_AXIS_TDATA_WIDTH / M_AXIS_TDATA_WIDTH - 1) + 1;
 
-  assign fifo_read_rden = m_axis_tready;
+  wire [READ_COUNT_WIDTH-1:0] int_rcount_wire;
+  wire [M_AXIS_TDATA_WIDTH-1:0] int_data_wire [2:0];
+  wire [2:0] int_valid_wire, int_ready_wire;
+  wire int_empty_wire, int_full_wire;
 
-  assign fifo_write_data = s_axis_tdata;
-  assign fifo_write_wren = s_axis_tvalid;
+  xpm_fifo_sync #(
+    .WRITE_DATA_WIDTH(S_AXIS_TDATA_WIDTH),
+    .FIFO_WRITE_DEPTH(WRITE_DEPTH),
+    .READ_DATA_WIDTH(M_AXIS_TDATA_WIDTH),
+    .READ_MODE("fwft"),
+    .FIFO_READ_LATENCY(0),
+    .FIFO_MEMORY_TYPE("block"),
+    .USE_ADV_FEATURES("0404"),
+    .WR_DATA_COUNT_WIDTH(WRITE_COUNT_WIDTH),
+    .RD_DATA_COUNT_WIDTH(READ_COUNT_WIDTH)
+  ) fifo_0 (
+    .empty(int_empty_wire),
+    .full(int_full_wire),
+    .wr_data_count(write_count),
+    .rd_data_count(int_rcount_wire),
+    .rst(~aresetn),
+    .wr_clk(aclk),
+    .wr_en(s_axis_tvalid),
+    .din(s_axis_tdata),
+    .rd_en(int_ready_wire[0]),
+    .dout(int_data_wire[0])
+  );
+
+  assign read_count = int_rcount_wire + int_valid_wire[1] + int_valid_wire[2];
+
+  assign int_valid_wire[0] = ~int_empty_wire;
+
+  assign int_ready_wire[2] = m_axis_tready;
+
+  generate
+    if(ALWAYS_READY == "TRUE")
+    begin : READY_INPUT
+      assign s_axis_tready = 1'b1;
+    end
+    else
+    begin : BLOCKING_INPUT
+      assign s_axis_tready = ~int_full_wire;
+    end
+  endgenerate
+
+  generate
+    if(ALWAYS_VALID == "TRUE")
+    begin : VALID_OUTPUT
+      assign m_axis_tdata = int_valid_wire[2] ? int_data_wire[2] : {(M_AXIS_TDATA_WIDTH){1'b0}};
+      assign m_axis_tvalid = 1'b1;
+    end
+    else
+    begin : BLOCKING_OUTPUT
+      assign m_axis_tdata = int_data_wire[2];
+      assign m_axis_tvalid = int_valid_wire[2];
+    end
+  endgenerate
+
+  input_buffer #(
+    .DATA_WIDTH(M_AXIS_TDATA_WIDTH)
+  ) buf_0 (
+    .aclk(aclk), .aresetn(aresetn),
+    .in_data(int_data_wire[0]), .in_valid(int_valid_wire[0]), .in_ready(int_ready_wire[0]),
+    .out_data(int_data_wire[1]), .out_valid(int_valid_wire[1]), .out_ready(int_ready_wire[1])
+  );
+
+  output_buffer #(
+    .DATA_WIDTH(M_AXIS_TDATA_WIDTH)
+  ) buf_1 (
+    .aclk(aclk), .aresetn(aresetn),
+    .in_data(int_data_wire[1]), .in_valid(int_valid_wire[1]), .in_ready(int_ready_wire[1]),
+    .out_data(int_data_wire[2]), .out_valid(int_valid_wire[2]), .out_ready(int_ready_wire[2])
+  );
 
 endmodule
