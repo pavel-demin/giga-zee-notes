@@ -23,7 +23,7 @@ void detach(char *path)
 int main()
 {
   FILE *fp;
-  int i, j, top;
+  int i, j;
   struct stat sb;
   size_t size;
   char buffer[256];
@@ -47,7 +47,6 @@ int main()
     return 1;
   }
 
-  top = 1;
   for(i = 5; i < 255; ++i)
   {
     if(buffer[i] == ' ')
@@ -55,7 +54,6 @@ int main()
       buffer[i] = 0;
       break;
     }
-    if(buffer[i] != '/') top = 0;
   }
 
   for(j = 5; j < i - 1; ++j)
