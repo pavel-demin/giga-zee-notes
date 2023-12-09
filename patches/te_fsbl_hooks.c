@@ -220,7 +220,8 @@ u32 te_read_IDCODE(void)
   xil_printf("\r\nDevice IDCODE: %x", ValueBack );
   tmval=(ValueBack & 0x0001F000)>>12;
   xil_printf("\r\nDevice Name: ");
-  if (tmval>>12==0x08) { xil_printf("7z014s");}
+  if (tmval==0x08) { xil_printf("7z014s");}
+  else if (tmval==0x03) { xil_printf("7z007s");}
   else if (tmval==0x02) { xil_printf("7z010");}
   else if (tmval==0x1b) { xil_printf("7z015");}
   else if (tmval==0x07) { xil_printf("7z020");}

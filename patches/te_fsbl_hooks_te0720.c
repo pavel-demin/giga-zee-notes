@@ -194,6 +194,19 @@ u32 TE_FsblHookBeforeHandoff_Custom(void)
 	unsigned char model2;
 	unsigned char model3;
 
+    u8 wdt;
+    u8 cpld_rev;
+    u8 cpld_bm;
+    u8 boot;
+    u8 pudc;
+    u8 boot_gen;
+   
+    
+    char* wdt_status;
+    char* pudc_mode;
+    char* boot_mode;
+    char* bootmode_gen; 
+    char* cpld_bootmode;        
 	XEmacPs Emac;
 	XEmacPs_Config *Mac_Config;
 
@@ -241,29 +254,153 @@ u32 TE_FsblHookBeforeHandoff_Custom(void)
     // Read register 4
     Status = XEmacPs_PhyRead(&Emac, 0x1A,  4, &rval16); if(Status != XST_SUCCESS){	return XST_FAILURE; }
 
+    cpld_rev = (rval16 & 0x00FF);
+    if (cpld_rev <= 6)
+    {
+        speed_grade = (rval16 >> 14) & 3;
+        /* 0=C, 1=E, 2=I, 3=A */
+        if ((rval16 & 0x3000)==0x0000) { temp_grade = 0x43; }
+        else if ((rval16 & 0x3000)==0x1000) { temp_grade = 0x45; }
+        else if ((rval16 & 0x3000)==0x2000) { temp_grade = 0x49; }
+        else if ((rval16 & 0x3000)==0x3000) { temp_grade = 0x41; }
+        else { temp_grade = 0x20; }
 
-    speed_grade = (rval16 >> 14) & 3;
-    /* 0=C, 1=E, 2=I, 3=A */
-    if ((rval16 & 0x3000)==0x0000) { temp_grade = 0x43; }
-    else if ((rval16 & 0x3000)==0x1000) { temp_grade = 0x45; }
-    else if ((rval16 & 0x3000)==0x2000) { temp_grade = 0x49; }
-    else if ((rval16 & 0x3000)==0x3000) { temp_grade = 0x41; }
-    else { temp_grade = 0x20; }
-    
-    if ((rval16 & 0x0F00)==0x000) { model1 = 0x20;model2 = 0x20;model3 = 0x46; } 
-    else if ((rval16 & 0x0F00)==0x100) { model1 = 0x20;model2 = 0x20;model3 = 0x52; }
-    else if ((rval16 & 0x0F00)==0x200) { model1 = 0x20;model2 = 0x4C;model3 = 0x46; }
-    else if ((rval16 & 0x0F00)==0x300) { model1 = 0x31;model2 = 0x34;model3 = 0x53; }
-    else { model1 = 0x31;model2 = 0x31;model3 = 0x31; }
-    
-    
-    xil_printf("\n\rSoM: TE0720-0%d-%d%c%c%c%c SC REV:%02x", pcb_rev, speed_grade, temp_grade, model1, model2, model3, rval16 & 0xFF);
-    xil_printf("\n\rMAC: ");
+        if ((rval16 & 0x0F00)==0x000) { model1 = 0x20;model2 = 0x20;model3 = 0x46; } 
+        else if ((rval16 & 0x0F00)==0x100) { model1 = 0x20;model2 = 0x20;model3 = 0x52; }
+        else if ((rval16 & 0x0F00)==0x200) { model1 = 0x20;model2 = 0x4C;model3 = 0x46; }
+        else if ((rval16 & 0x0F00)==0x300) { model1 = 0x31;model2 = 0x34;model3 = 0x53; }
+        else { model1 = 0x31;model2 = 0x31;model3 = 0x31; }
 
-    for(i = 0; i < 6; i++) {
-      xil_printf("%02x ", mac_addr[i]);
+
+        xil_printf("\n\rSoM: TE0720-0%d-%d%c%c%c%c SC REV:%02x", pcb_rev, speed_grade, temp_grade, model1, model2, model3, rval16 & 0xFF);
+        xil_printf("\n\rMAC: ");
+
+        for(i = 0; i < 6; i++) {
+        xil_printf("%02x ", mac_addr[i]);
+        }
+        xil_printf("\n\r"); 
     }
-    xil_printf("\n\r");
+    else
+    {
+        Status = XEmacPs_PhyRead(&Emac, 0x1A,  4, &rval16); if(Status != XST_SUCCESS){	return XST_FAILURE; }
+        wdt = (rval16 >> 14) & 0x3;
+        if (wdt == 0b00) 
+        {
+            wdt_status = "Deactive";
+        }else if (wdt == 0b01) 
+        {
+            wdt_status = "Hardware_WDT";
+        }else if (wdt == 0b10)
+        {
+            wdt_status = "Software_WDT";
+        }else if (wdt == 0b11)
+        {
+            wdt_status = "No WDT chip on the board. SOftware_WDT with PL clock";
+        }
+        
+        
+        
+        boot_gen = (rval16 >> 12) & 0x3;
+        if (boot_gen == 0b00)
+        {
+            bootmode_gen = "QSPI/SD";
+        }else if (boot_gen == 0b01)
+        {
+            bootmode_gen = "QSPI/JTAG";
+        }else if (boot_gen == 0b10)
+        {
+            bootmode_gen = "JTAG/SD";
+        }else if (boot_gen == 0b11)
+        {
+            bootmode_gen = "default QSPI/JTAG/SD";
+        }else
+        {
+            bootmode_gen = "undefined";
+        }
+
+
+        pudc = (rval16 >> 11) & 0x1;
+        if (pudc==1)
+        {
+            pudc_mode = "Pulldown";
+        } else
+        {
+            pudc_mode = "Pullup";
+        }
+
+
+        Status = XEmacPs_PhyRead(&Emac, 0x1A,  4, &rval16); if(Status != XST_SUCCESS){	return XST_FAILURE; }
+        cpld_bm = (rval16 >> 10)& 0x01;
+        if (cpld_bm == 0)
+        {
+            cpld_bootmode = "Deactive";
+            // Read register 4
+            Status = XEmacPs_PhyRead(&Emac, 0x1A,  4, &rval16); if(Status != XST_SUCCESS){	return XST_FAILURE; }
+            boot = (rval16 >> 8) & 0x3;
+            if (boot == 0b00)
+            {
+                boot_mode = "JTAG";
+            }
+            else if (boot == 0b10)
+            {            
+                boot_mode = "QSPI";
+            }
+            else if (boot == 0b11)
+            {
+                boot_mode = "SD Card";
+            }
+            else if (boot == 0b01)
+            {
+                boot_mode = "undefined";               
+            } 
+            // xil_printf("\n\rSoM: TE0720 CPLD_BM=%s(%x) BOOTMOD_GEN=%x(%s) PUDC_MODE=%s(%d) BOOT_MODE=%s(%x) CPLD_REV=%02x", cpld_bootmode, cpld_bm, boot_gen, bootmode_gen, pudc_mode, pudc, boot_mode, boot, cpld_rev);
+            // xil_printf("\n\rSoM: TE0720 WDT_STATUS=%s(%x) CPLD_BM=%s(%x) BOOTMOD_GEN=%x(%s) PUDC_MODE=%s(%d) BOOT_MODE=%s(%x) CPLD_REV=%02x", wdt_status, wdt, cpld_bootmode, cpld_bm, boot_gen, bootmode_gen, pudc_mode, pudc, boot_mode, boot, cpld_rev);
+            xil_printf("\n\rCPLD_REV=%02x\n\r",cpld_rev);
+            xil_printf("\n\rWDT_STATUS=%s(%x)\n\r", wdt_status,wdt);
+            xil_printf("\n\rCPLD_BM=%s(%x)\n\r",cpld_bootmode, cpld_bm);
+            xil_printf("\n\rBOOTMOD_GEN=%x(%s)\n\r", boot_gen, bootmode_gen);
+            xil_printf("\n\rPUDC_MODE=%s(%d)\n\r", pudc_mode, pudc);
+            xil_printf("\n\rBOOT_MODE=%s(%x)\n\r", boot_mode, boot);        
+        } else
+        {
+            cpld_bootmode="Active";
+            // Read register 12 (CR4[15:8])
+            Status = XEmacPs_PhyRead(&Emac, 0x1A,  12, &rval16); if(Status != XST_SUCCESS){	return XST_FAILURE; }    
+            boot = (rval16 >> 8) & 0x3;
+            if (boot == 0b01)
+            {
+                boot_mode = "JTAG";
+            }
+            else if (boot == 0b10)
+            {            
+                boot_mode = "QSPI";
+            }
+            else if (boot == 0b11)
+            {
+                boot_mode = "SD Card";
+            }
+            else if (boot == 0b00)
+            {
+                boot_mode = "undefined";               
+            }                
+            // xil_printf("\n\rSoM: TE0720 CPLD_BM=%s(%x) BOOTMOD_GEN=%x(%s) PUDC_MODE=%s(%d) BOOT_MODE=%s(%x) CPLD_REV=%02x", cpld_bootmode, cpld_bm, boot_gen, bootmode_gen, pudc_mode, pudc, boot_mode, boot, cpld_rev);
+            // xil_printf("\n\rSoM: TE0720 WDT_STATUS=%s(%x) CPLD_BM=%s(%x) BOOTMOD_GEN=%x(%s) PUDC_MODE=%s(%d) BOOT_MODE=%s(%x) CPLD_REV=%02x", wdt_status, wdt, cpld_bootmode, cpld_bm, boot_gen, bootmode_gen, pudc_mode, pudc, boot_mode, boot, cpld_rev);
+            xil_printf("\n\rCPLD_REV=%02x\n\r",cpld_rev);
+            xil_printf("\n\rWDT_STATUS=%s(%x)\n\r", wdt_status,wdt);
+            xil_printf("\n\rCPLD_BM=%s(%x)\n\r",cpld_bootmode, cpld_bm);
+            xil_printf("\n\rBOOTMOD_GEN=%x(%s)\n\r", boot_gen, bootmode_gen);
+            xil_printf("\n\rPUDC_MODE=%s(%d)\n\r", pudc_mode, pudc);
+            xil_printf("\n\rBOOT_MODE=%s(%x)\n\r", boot_mode, boot);
+        }
+                   
+        xil_printf("\n\rMAC: ");
+    
+        for(i = 0; i < 6; i++) {
+          xil_printf("%02x ", mac_addr[i]);
+        }
+        xil_printf("\n\r");
+    }
+
   #endif
 
     /*
