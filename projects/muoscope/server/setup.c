@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
     return EXIT_FAILURE;
   }
 
-  cfg = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ|PROT_WRITE, MAP_SHARED, fd_mem, 0x40001000);
+  cfg = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ|PROT_WRITE, MAP_SHARED, fd_mem, 0x40000000);
 
   rst = ((uint8_t *)(cfg + 0));
   wnd = ((uint8_t *)(cfg + 2));
