@@ -106,11 +106,12 @@ rc-update add local default
 rc-update add dcron default
 rc-update add sshd default
 
+rc-update add dnsmasq default
+
 mkdir -p etc/runlevels/wifi
 rc-update -s add default wifi
 
 rc-update add iptables wifi
-rc-update add dnsmasq wifi
 rc-update add hostapd wifi
 
 sed -i 's/^SAVE_ON_STOP=.*/SAVE_ON_STOP="no"/;s/^IPFORWARD=.*/IPFORWARD="yes"/' etc/conf.d/iptables
