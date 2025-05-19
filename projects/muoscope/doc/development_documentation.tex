@@ -5,7 +5,7 @@
 
 \usepackage[margin=2cm]{geometry}
 
-\usepackage[allowlitunits]{siunitx}
+\usepackage{siunitx}
 
 \usepackage{fontspec}
 \usepackage{sectsty}
@@ -69,7 +69,7 @@ The data acquisition system consists of the following subsystems:
 \begin{itemize}[nosep]
   \item 1 computer
   \item 1 FPGA+CPU module (Trenz Electronic TE0720-03-1CF) \cite{te0720}
-  \item 1 high-voltage power supply (iseg DPS mini DPn 100 504 24 5 M) \cite{dpsmini}
+  \item 1 high-voltage power supply (iseg DPS mini DPn 100 504 24 5 M) \cite{dps}
   \item 1 high-voltage controller
   \item 2 frontend modules \cite{rpcfesch}
   \item 4 groups of 16 RPC strips connected to CMS RPC frontend integrated circuits \cite{rpcnim2000} in the frontend modules
@@ -277,30 +277,30 @@ The FGPA configuration contains the following addressable status and configurati
   \hline
   \textbf{address} & \textbf{information} \\
   \hline
-  0x40000000 + 0 & FIFO read counter (12-bit integer value) \\
+  0x40000000 + 0 & 2 reset bits (0: coincidence finding reset, 1: FIFO reset) \\
   \hline
-  0x40001000 + 0 & 3 reset bits (0: coincidence finding reset, 1: FIFO reset) \\
+  0x40000000 + 2 & coincidence window (8-bit integer value) \\
   \hline
-  0x40001000 + 2 & coincidence window (8-bit integer value) \\
+  0x40000000 + 4 & delay for RPC A (8-bit integer value) \\
   \hline
-  0x40001000 + 4 & delay for RPC A (8-bit integer value) \\
+  0x40000000 + 5 & delay for RPC B (8-bit integer value) \\
   \hline
-  0x40001000 + 5 & delay for RPC B (8-bit integer value) \\
+  0x40000000 + 6 & delay for RPC C (8-bit integer value) \\
   \hline
-  0x40001000 + 6 & delay for RPC C (8-bit integer value) \\
+  0x40000000 + 7 & delay for RPC D (8-bit integer value) \\
   \hline
-  0x40001000 + 7 & delay for RPC D (8-bit integer value) \\
+  0x41000000 + 0 & FIFO read counter (16-bit integer value) \\
   \hline
   \end{tabular}
 \end{center}
 
-Data in the FIFO buffer can be accessed by reading 32-bit values from address 0x40002000.
-
-The FIFO read counter is used to check the presence of data in the FIFO buffer before reading it.
-
 Reset bits are used to start and stop coincidence blocks and to empty the FIFO buffer.
 
 Other configuration registers are used to configure the parameters of the delay and coincidence blocks.
+
+Data in the FIFO buffer can be accessed by reading 32-bit values from address 0x42000000.
+
+The FIFO read counter is used to check the presence of data in the FIFO buffer before reading it.
 
 The diagram of the coincidence finding algorithm is shown in figure \ref{fig:algorithm}.
 
@@ -472,17 +472,17 @@ When the \texttt{dump} program is running, it continuously reads data from the F
 
 The data format is binary. Each record consists of 64 bits of hits data followed by 64 bits of timestamp. The bits corresponding to the channels having had a signal crossing the discriminator threshold during the coincidence window are set to 1. The timestamp is expressed in number of FPGA clock cycles. The duration of the FPGA clock cycle is 5 ns.
 
-The following code is an example script using the \texttt{setup} program to set the voltage to values between 2000 and 3500 and the threshold to values between 80 and 100 and using the \texttt{dump} program to record data for 10 minutes for each combination of voltage and threshold values:
+The following code is an example script using the \texttt{setup} program to set the voltage to values between 2500 and 3000 and the threshold to values between 20 and 50 and using the \texttt{dump} program to record data for 10 minutes for each combination of voltage and threshold values:
 \vspace{-1ex}
 \begin{verbatim}
-for hv in `seq 2000 100 3500`
+for hv in `seq 2500 100 3000`
 do
-  for th in `seq 80 5 100`
+  for th in `seq 20 5 50`
   do
     file=scan_hv_${hv}_th_${th}.dat
 
     ./setup ${th} ${th} ${th} ${th} ${th} ${th} ${th} ${th} \
-      100 100 100 100 100 100 100 100 0 0 0 0 4 1 ${hv} 4095
+      100 100 100 100 100 100 100 100 0 0 0 0 1 ${hv} 4095
 
     sleep 10
 
