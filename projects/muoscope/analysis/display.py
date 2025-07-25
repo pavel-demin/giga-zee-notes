@@ -19,10 +19,11 @@ def display(f, ax, entry):
     l = 160
     h = [0, 50, 100, 400, 450, 500]
 
-    f.seek((entry - 1) * 16)
+    f.seek(16 + (entry - 1) * 16)
     event = f.read(16)
     rpc, time = struct.unpack("QQ", event)
-    pmt = time & 3
+    laser = time & 1
+    trig = (time >> 1) & 1
     time = time >> 2
 
     ax.cla()
@@ -52,7 +53,7 @@ def display(f, ax, entry):
         y = [0, 0, l, l]
         z = [h[layer], h[layer], h[layer], h[layer]]
         v = [list(zip(y, x, z))]
-        if pmt >> i & 1:
+        if trig:
             ax.add_collection3d(Poly3DCollection(v, facecolors="r", alpha=0.1))
         else:
             ax.add_collection3d(Poly3DCollection(v, facecolors="y", alpha=0.1))
@@ -77,7 +78,7 @@ except (OSError, IOError) as e:
     sys.exit(1)
 
 f.seek(0, os.SEEK_END)
-size = f.tell()
+size = f.tell() - 16
 
 fig = plt.figure(figsize=[8, 6], constrained_layout=True)
 
