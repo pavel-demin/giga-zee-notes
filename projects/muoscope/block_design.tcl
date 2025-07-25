@@ -187,19 +187,6 @@ cell pavel-demin:user:axis_window win_0 {} {
   aresetn slice_1/Dout
 }
 
-# Create axis_subset_converter
-cell xilinx.com:ip:axis_subset_converter subset_0 {
-  S_TDATA_NUM_BYTES.VALUE_SRC USER
-  M_TDATA_NUM_BYTES.VALUE_SRC USER
-  S_TDATA_NUM_BYTES 16
-  M_TDATA_NUM_BYTES 16
-  TDATA_REMAP {tdata[31:0],tdata[63:32],tdata[95:64],tdata[127:96]}
-} {
-  S_AXIS win_0/M_AXIS
-  aclk ps_0/FCLK_CLK0
-  aresetn slice_1/Dout
-}
-
 # Create axis_fifo
 cell pavel-demin:user:axis_fifo fifo_0 {
   S_AXIS_TDATA_WIDTH 128
@@ -207,7 +194,7 @@ cell pavel-demin:user:axis_fifo fifo_0 {
   WRITE_DEPTH 8192
   ALWAYS_READY TRUE
 } {
-  S_AXIS subset_0/M_AXIS
+  S_AXIS win_0/M_AXIS
   M_AXIS hub_0/S00_AXIS
   read_count hub_0/sts_data
   aclk ps_0/FCLK_CLK0
