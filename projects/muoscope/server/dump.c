@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fcntl.h>
+#include <time.h>
 
 int interrupted = 0;
 
@@ -19,6 +20,7 @@ int main(int argc, char *argv[])
 {
   int fd_mem;
   FILE *file_out;
+  struct timespec t;
   volatile void *cfg, *sts;
   volatile uint8_t *rst, *cut;
   volatile uint16_t *cntr;
@@ -51,6 +53,14 @@ int main(int argc, char *argv[])
   cntr = ((uint16_t *)(sts + 0));
 
   rst = ((uint8_t *)(cfg + 0));
+
+  clock_gettime(CLOCK_REALTIME, &t);
+
+  if(fwrite(&t, 1, sizeof(t), file_out) < 0)
+  {
+    perror("fwrite");
+    return EXIT_FAILURE;
+  }
 
   /* reset fifo */
   *rst &= ~2;
